@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 
 // listener subscription
 let subscription: vscode.Disposable;
+let anotherSubscription: vscode.Disposable;
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -33,22 +34,27 @@ export function deactivate() {
 	subscription.dispose(); // stop listening
 }
 
+
 let listenerOfFileCreation = function(event: vscode.FileCreateEvent) {
 	//console.log('It happened', event);
 	vscode.window.showInformationMessage('It happened '+event.files.toString());
+
+	anotherSubscription = vscode.window.onDidChangeVisibleTextEditors(listenerOfEditorIsVisible);
+	// anotherSubscription = vscode.workspace.onDidOpenTextDocument(listenerOfTextDocumentIsOpen);
+	// anotherSubscription = vscode.workspace.onDidChangeTextDocument(listenerOfTextDocumentIsOpen);
+};
+
+let listenerOfEditorIsVisible = function (event: vscode.TextEditor[]) {
 	let pos = new vscode.Position(0,0);
-	//let edit = vscode.TextEdit.insert(pos,'ypa!!!');
 	let activeEditor = vscode.window.activeTextEditor;
 	if (!activeEditor) {
 		vscode.window.showErrorMessage('Active editor not exist!');
 		return;
 	}
-	let document = activeEditor.document;
-
 	activeEditor.edit( e => {
 		e.insert(pos,'ypa!!!');
 		//vscode.TextEdit.insert(pos,'ypa!!!');
 		vscode.window.showInformationMessage('is work?');
 	});
-
+	anotherSubscription.dispose();
 };
