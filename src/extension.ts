@@ -1,10 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import { readFile, readFileSync } from 'fs';
 import * as vscode from 'vscode';
+import { Creator } from "./modules/creator";
 
 // listener subscription
 let subscription: vscode.Disposable;
 let anotherSubscription: vscode.Disposable;
+
+let fileExtension = ''; // Created file extension
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -34,14 +38,24 @@ export function deactivate() {
 	subscription.dispose(); // stop listening
 }
 
-
 let listenerOfFileCreation = function(event: vscode.FileCreateEvent) {
-	//console.log('It happened', event);
-	vscode.window.showInformationMessage('It happened '+event.files.toString());
+	// Тут надо проверить какой именно файл был создан
+	let file = event.files.toString();
+	// fileExtension = '*'+file.substr(file.lastIndexOf("."));
+	// vscode.window.showInformationMessage('It happened '+fileExtension);
+	//vscode.window.showInformationMessage(`File detected: ${file}`);
+	console.log('New created file detected: '+file);
 
-	anotherSubscription = vscode.window.onDidChangeVisibleTextEditors(listenerOfEditorIsVisible);
-	// anotherSubscription = vscode.workspace.onDidOpenTextDocument(listenerOfTextDocumentIsOpen);
-	// anotherSubscription = vscode.workspace.onDidChangeTextDocument(listenerOfTextDocumentIsOpen);
+	const templateCreator = new Creator(file);
+	if(templateCreator.createTemplate()) {
+		vscode.window.showInformationMessage('Template Created!');
+	}
+	else {
+		vscode.window.showWarningMessage('Template NOT Created!');
+	}
+	// if (extensionValid()) {
+	// 	anotherSubscription = vscode.window.onDidChangeVisibleTextEditors(listenerOfEditorIsVisible);	
+	// }
 };
 
 let listenerOfEditorIsVisible = function (event: vscode.TextEditor[]) {
@@ -58,3 +72,17 @@ let listenerOfEditorIsVisible = function (event: vscode.TextEditor[]) {
 	});
 	anotherSubscription.dispose();
 };
+
+function extensionValid(): boolean {
+	vscode.window.showInformationMessage('Extension validation...');
+	//let file: string = readFileSync('./res/template_settings.json','utf-8');
+	//vscode.window.showInformationMessage('File = '+file);
+	readFile('G:/Anton/My Programs/VSCode/Extension/mql5SourcesTemplate/src/res/template_settings.json', function (err, data) {
+		if (err) {
+			return console.error(err);
+		}
+		return console.log("Asynchronous read: " + data.toString());
+   });
+	vscode.window.showInformationMessage('Done?');
+	return(false);
+}
