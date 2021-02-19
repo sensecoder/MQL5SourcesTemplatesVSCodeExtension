@@ -1,6 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { readFile, readFileSync } from 'fs';
+import { dirname } from 'path';
+import { pathToFileURL } from 'url';
 import * as vscode from 'vscode';
 import { Creator } from "./modules/creator";
 
@@ -30,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	subscription = vscode.workspace.onDidCreateFiles(listenerOfFileCreation);
 
+	//console.log('Current dir='+__dirname);
 	vscode.window.showInformationMessage('MQL5 Sources Template Activated!');
 }
 

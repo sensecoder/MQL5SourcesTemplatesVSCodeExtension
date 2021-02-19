@@ -1,12 +1,16 @@
 import { UserChoice } from "./userchoiсe";
 import { Insertor } from "./insertor";
+import * as path from 'path';
+import { readFile, readFileSync } from 'fs';
 
 /**
  * Основной класс для расширения mqlSourceTemplate. 
  * Запускает процесс создания шаблона для валидного файла.
  */
 export class Creator {
-   private file: string ='';
+   private file: string = '';
+   // местонахождение файла с настройкаи относительно этого файла:
+   private templateSettingsJson: string = path.join(__dirname,'../res/template_settings.json');
 
    /**
     * Создаёт шаблоны для валидного файла
@@ -39,7 +43,32 @@ export class Creator {
    }
 
    private checkFile(): any {
+      let fileExtension = '*'+this.file.substr(this.file.lastIndexOf("."));
+      let settings: any; 
+      let approve: boolean = false;
+      settings = JSON.parse(this.readSettingsFile(),(key, value) => {
+         if(key === fileExtension || approve) {
+            console.log('mi tyt!');
+            approve = true;
+            return value;
+         }
+      });
+      // settings = JSON.parse(this.readSettingsFile());
+
+      let reJson: string = JSON.stringify(settings);
+      console.log('reJson = ' + reJson);
 
       return null;
+   }
+
+   private readSettingsFile(): string {
+      let content: string = '';
+      try {
+         content = readFileSync(this.templateSettingsJson, 'utf8');
+      } catch (error) {
+         console.error('SettingsFile read error occur! '+this.templateSettingsJson);
+      }
+
+      return content;
    }
 }
