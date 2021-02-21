@@ -1,0 +1,131 @@
+//+------------------------------------------------------------------+
+//|                                                <FileName inHead> |
+//|                                               <Copyright inHead> |
+//|                                                    <Link inHead> |
+//+------------------------------------------------------------------+
+#property copyright "<Copyright>"
+#property link      "<Link>"
+#property version   "<Version = 1.00>"
+
+<Optional if IncludeDescription>
+<Description>
+</Optional>
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit() {
+<Optional if OnTimer>
+//--- create timer
+   EventSetTimer(<TimerSetting = 60>);
+</Optional>
+   
+//---
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason) {
+<Optional if OnTimer>
+//--- destroy timer
+   EventKillTimer();
+</Optional>   
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick() {
+   
+}
+
+<Optional if OnTimer>
+//+------------------------------------------------------------------+
+//| Timer function                                                   |
+//+------------------------------------------------------------------+
+void OnTimer() {
+
+}
+</Optional>
+
+<Optional if OnTrade>
+//+------------------------------------------------------------------+
+//| Trade function                                                   |
+//+------------------------------------------------------------------+
+void OnTrade() {
+
+}
+</Optional>
+
+<Optional if OnTradeTransaction>
+//+------------------------------------------------------------------+
+//| TradeTransaction function                                        |
+//+------------------------------------------------------------------+
+void OnTradeTransaction(const MqlTradeTransaction& trans,
+                        const MqlTradeRequest& request,
+                        const MqlTradeResult& result) {
+
+}
+</Optional>
+
+<Optional if OnTester>
+//+------------------------------------------------------------------+
+//| Tester function                                                  |
+//+------------------------------------------------------------------+
+double OnTester() {
+   double ret=0.0;
+
+   return(ret);
+}
+</Optional>
+
+<Optional if OnTesterInit>
+//+------------------------------------------------------------------+
+//| TesterInit function                                              |
+//+------------------------------------------------------------------+
+void OnTesterInit() {
+   
+}
+</Optional>
+
+<Optional if OnTesterPass>
+//+------------------------------------------------------------------+
+//| TesterPass function                                              |
+//+------------------------------------------------------------------+
+void OnTesterPass() {
+   
+}
+</Optional>
+
+<Optional if OnTesterDeinit>
+//+------------------------------------------------------------------+
+//| TesterDeinit function                                            |
+//+------------------------------------------------------------------+
+void OnTesterDeinit() {
+   
+}
+</Optional>
+
+<Optional if OnChartEvent>
+//+------------------------------------------------------------------+
+//| ChartEvent function                                              |
+//+------------------------------------------------------------------+
+void OnChartEvent(const int id,
+                  const long &lparam,
+                  const double &dparam,
+                  const string &sparam) {
+   
+}
+</Optional>
+
+<Optional if OnBookEvent>
+//+------------------------------------------------------------------+
+//| BookEvent function                                               |
+//+------------------------------------------------------------------+
+void OnBookEvent(const string &symbol) {
+   
+}
+</Optional>
+//+------------------------------------------------------------------+

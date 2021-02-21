@@ -2,6 +2,7 @@ import { UserChoice } from "./userchoiсe";
 import { Insertor } from "./insertor";
 import * as path from 'path';
 import { readFile, readFileSync } from 'fs';
+import { assert } from "console";
 
 /**
  * Основной класс для расширения mqlSourceTemplate. 
@@ -27,14 +28,14 @@ export class Creator {
       // Проверка файла на валидность:
       let possibleOptions = this.checkFile(); // Должны быть получены возможные варианты параметров шаблона
       if(!possibleOptions) {
-         console.log('Created file not supported!');
+         console.error('Created file not supported!');
          return false;
       }
       // Пользователь делает свой выбор:
       const userChoice = new UserChoice(possibleOptions);
       let selectedOptions = userChoice.chooseOption();
       if(!selectedOptions) {
-         console.log('Options not recieved from the user!');
+         console.error('Options not recieved from the user!');
          return false;
       }
       // Отрисовка шаблона в редакторе файла:
@@ -42,25 +43,54 @@ export class Creator {
       return insertor.applyTemplate();
    }
 
+   /**
+    * Проверяет файл с настройками и возвращает необходимую часть из него
+    */
    private checkFile(): any {
-      let fileExtension = '*'+this.file.substr(this.file.lastIndexOf("."));
-      let settings: any; 
-      let approve: boolean = false;
-      settings = JSON.parse(this.readSettingsFile(),(key, value) => {
-         if(key === fileExtension || approve) {
-            console.log('mi tyt!');
-            approve = true;
-            return value;
-         }
-      });
-      // settings = JSON.parse(this.readSettingsFile());
-
-      let reJson: string = JSON.stringify(settings);
-      console.log('reJson = ' + reJson);
-
-      return null;
+      let fileExtension = this.file.substr(this.file.lastIndexOf(".")+1);
+      
+      // Чтение файла с настройками:
+      let jsonStr = this.readSettingsFile();
+      
+      // Попробуем сделать объект с настройками:
+      let settings: any;
+      try {
+         settings = JSON.parse(jsonStr);   
+      } catch (error) {
+         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Error whith "jsonStr", can not create "settings"');
+         return null;
+      }
+      
+      // Попробуем вытащить нужные части из настроек:
+      let general: any;
+      let templates: any;
+      try {
+         general = settings.General;
+         templates = eval('settings.FileExtension.'+fileExtension);   
+      } catch (error) {
+         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Something bad whith "settings", can not create "general" and "templates"');
+         return null;
+      }
+      if(!templates){
+         return null;
+      }
+      
+      // Попробуем объединить эти части:
+      let reJson: string = '{"General":'+JSON.stringify(general)+','+
+                            JSON.stringify(templates).slice(1);
+      try {
+         settings = JSON.parse(reJson);   
+      } catch (error) {
+         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Error whith "reJson", can not create settings');
+         settings = null;
+      }
+      
+      return settings;
    }
 
+   /**
+    * Считывание данных из файла настроек
+    */
    private readSettingsFile(): string {
       let content: string = '';
       try {

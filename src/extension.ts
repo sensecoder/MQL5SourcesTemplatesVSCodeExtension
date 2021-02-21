@@ -47,13 +47,15 @@ let listenerOfFileCreation = function(event: vscode.FileCreateEvent) {
 	// fileExtension = '*'+file.substr(file.lastIndexOf("."));
 	// vscode.window.showInformationMessage('It happened '+fileExtension);
 	//vscode.window.showInformationMessage(`File detected: ${file}`);
-	console.log('New created file detected: '+file);
+	console.log('New created file detected: '+file.substr(file.lastIndexOf('/')+1));
 
 	const templateCreator = new Creator(file);
 	if(templateCreator.createTemplate()) {
 		vscode.window.showInformationMessage('Template Created!');
+		console.log('Template Successfully Created!');
 	}
 	else {
+		console.error('Template NOT Created!');
 		vscode.window.showWarningMessage('Template NOT Created!');
 	}
 	// if (extensionValid()) {
