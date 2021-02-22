@@ -1,8 +1,8 @@
 import { UserChoice } from "./userchoiсe";
 import { Insertor } from "./insertor";
 import * as path from 'path';
-import { readFile, readFileSync } from 'fs';
-import { assert } from "console";
+import { readFileSync } from 'fs';
+//import { assert } from "console";
 
 /**
  * Основной класс для расширения mqlSourceTemplate. 
