@@ -1,8 +1,10 @@
 //import { settings } from "cluster";
 import { TemplatePrototypeHandler } from "./templateprototypehandler";
+import * as path from 'path';
+import { readFileSync } from 'fs';
 
 export class Insertor {
-   private settings: any;
+   private settings: Map<string, any>;
    private file: string = '';
    
    /**
@@ -11,7 +13,7 @@ export class Insertor {
     * @param fileName Файл, к которому будет применятся шаблон
     */
    constructor(options: any, fileName: string) {
-      this.settings = options;
+      this.settings = this.mapGenerator(options);
       this.file = fileName;
    }
 
@@ -19,8 +21,8 @@ export class Insertor {
     * Применяет настройки к шаблону для текущего файла и вставляет их в редактор
     */
    public applyTemplate(): boolean {
-      let protoTemplate = this.getTextFromPrototype();
-      let protoHandler = new TemplatePrototypeHandler(protoTemplate, this.settings);
+      let protoFile = this.getPrototypeFileName();
+      let protoHandler = new TemplatePrototypeHandler(protoFile, this.settings);
       let modifiedTemplate = protoHandler.modifyPrototype();
       if (modifiedTemplate === '') {
          return false;
@@ -30,12 +32,30 @@ export class Insertor {
    }
 
    /**
-    * Находит файл с прототипом шаблона и возвращает его текст
+    * Находит файл с прототипом шаблона и возвращает его URI
     */
-   private getTextFromPrototype(): string {
-      let protoTemplate = '';
+   private getPrototypeFileName(): string {
+      // Имя файла шаблона должно находится в settings...
+      let fileName = this.settings.get('PrototypeFileName');
+      if(!fileName){
+         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': File name of template prototype not found!');
+         return '';
+      }
+      // Надо сделать полное имя:
+      fileName = path.join(__dirname,'../res/'+fileName);
 
-      return protoTemplate;
+      return fileName;
+   }
+
+   private readPrototypeFile(fileName: string): string {
+      let content: string = '';
+      try {
+         content = readFileSync(fileName, 'utf8');
+      } catch (error) {
+         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Template prototype file read error occur! fileName = '+fileName);
+      }
+
+      return content;
    }
 
    /**
@@ -45,5 +65,26 @@ export class Insertor {
    private insertToEditor(template: string): boolean {
       
       return false;
+   }
+
+   /**
+    * Возвращает карту с полями объекта, индексы массивов не включаются.
+    * @param object "Расчленяемый" объект
+    */
+   private mapGenerator(object: any): Map<string, any> {
+      let map = new Map<string, any>();
+      
+      JSON.stringify(object, (key, value) => {
+         try { // убираем индексы массивов
+            if((typeof JSON.parse(key)) === "number") {
+               return undefined;
+            }
+         } catch (error) {            
+         }         
+         map.set(key, value);
+         return value;
+      });
+
+      return map;
    }
 }

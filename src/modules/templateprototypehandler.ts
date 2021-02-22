@@ -1,4 +1,7 @@
+import { readFileSync } from 'fs';
+
 export class TemplatePrototypeHandler {
+   private protoFile: string = '';
    private protoText: string = '';
    private modifiedText: string = '';
    private tokensParams: any;
@@ -8,9 +11,10 @@ export class TemplatePrototypeHandler {
     * @param protoTemplate Текст прототипа шаблона
     * @param params Параметры, необходимые для соответствующей обработки
     */
-   constructor(protoTemplate: string, params: any) {
-      this.protoText = protoTemplate;
+   constructor(protoFileName: string, params: any) {
+      this.protoFile = protoFileName;
       this.tokensParams = params;
+      this.readProtoFile();
    }
 
    /**
@@ -19,5 +23,13 @@ export class TemplatePrototypeHandler {
    public modifyPrototype(): string {
       
       return this.modifiedText;
+   }
+
+   private readProtoFile(){
+      try {
+         this.protoText = readFileSync(this.protoFile, 'utf8');
+      } catch (error) {
+         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Template prototype file read error occur! fileName = '+this.protoFile);
+      }
    }
 }

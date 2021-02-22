@@ -7,7 +7,7 @@
       "mq5": {
          "Templates": {
             "Expert": {
-               "TemplateFileName": "mql5_expert.tmp",
+               "PrototypeFileName": "mql5_expert.tmp",
                "IncludeDescription": false,
                "OnTimer": false,
                "OnTrade": false,
@@ -24,7 +24,7 @@
       "mqh": {
          "Templates": {
             "Class": {
-               "TemplateFileName": "mql5_class.tmp",
+               "PrototypeFileName": "mql5_class.tmp",
                "IncludeDescription": false,
                "Extend": false,
                "ExtendModifier": [

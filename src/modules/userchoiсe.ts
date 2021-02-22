@@ -22,7 +22,7 @@ export class UserChoice {
     */
    public chooseOption(): any {
       // Временная заглушка, поскольку не хочу заниматься пока проработкой этого:
-      return settings;
+      return this.settings;
 
       let panel = vscode.window.createWebviewPanel(
                                  'userChooseView',
