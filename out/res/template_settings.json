@@ -26,6 +26,7 @@
             "Class": {
                "PrototypeFileName": "mql5_class.tmp",
                "IncludeDescription": false,
+               "ClassName":"$FileName",
                "Extend": false,
                "ExtendModifier": [
                   "public", "protected", "private"

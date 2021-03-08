@@ -10,6 +10,9 @@ import { Creator } from "./modules/creator";
 let subscription: vscode.Disposable;
 let anotherSubscription: vscode.Disposable;
 
+// Extension context
+let extContext: vscode.ExtensionContext;
+
 let fileExtension = ''; // Created file extension
 
 export function activate(context: vscode.ExtensionContext) {
@@ -31,6 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	subscription = vscode.workspace.onDidCreateFiles(listenerOfFileCreation);
+	extContext = context;
 
 	//console.log('Current dir='+__dirname);
 	vscode.window.showInformationMessage('MQL5 Sources Template Activated!');
@@ -44,20 +48,22 @@ export function deactivate() {
 let listenerOfFileCreation = function(event: vscode.FileCreateEvent) {
 	// Тут надо проверить какой именно файл был создан
 	let file = event.files.toString();
+	file = event.files[0].fsPath;
 	// fileExtension = '*'+file.substr(file.lastIndexOf("."));
 	// vscode.window.showInformationMessage('It happened '+fileExtension);
 	//vscode.window.showInformationMessage(`File detected: ${file}`);
 	console.log('New created file detected: '+file.substr(file.lastIndexOf('/')+1));
 
-	const templateCreator = new Creator(file);
-	if(templateCreator.createTemplate()) {
-		vscode.window.showInformationMessage('Template Created!');
-		console.log('Template Successfully Created!');
-	}
-	else {
-		console.error('Template NOT Created!');
-		vscode.window.showWarningMessage('Template NOT Created!');
-	}
+	const templateCreator = new Creator(file, extContext);
+	templateCreator.createTemplate();
+	// if(templateCreator.createTemplate()) {
+	// 	vscode.window.showInformationMessage('Template Created!');
+	// 	console.log('Template Successfully Created!');
+	// }
+	// else {
+	// 	console.error('Template NOT Created!');
+	// 	vscode.window.showWarningMessage('Template NOT Created!');
+	// }
 	// if (extensionValid()) {
 	// 	anotherSubscription = vscode.window.onDidChangeVisibleTextEditors(listenerOfEditorIsVisible);	
 	// }

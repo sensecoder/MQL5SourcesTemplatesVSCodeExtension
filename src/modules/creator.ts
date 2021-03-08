@@ -1,6 +1,7 @@
 import { UserChoice } from "./userchoiсe";
 import { Insertor } from "./insertor";
 import * as path from 'path';
+import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 //import { assert } from "console";
 
@@ -10,6 +11,7 @@ import { readFileSync } from 'fs';
  */
 export class Creator {
    private file: string = '';
+   private extContext: vscode.ExtensionContext;
    // местонахождение файла с настройкаи относительно этого файла:
    private templateSettingsJson: string = path.join(__dirname,'../res/template_settings.json');
 
@@ -17,14 +19,16 @@ export class Creator {
     * Создаёт шаблоны для валидного файла
     * @param fileName : имя файла в который необходимо поместить шаблон
     */
-   constructor(fileName:string) {
+   constructor(fileName: string, context: vscode.ExtensionContext) {
       this.file = fileName;
+      // console.log('Creator: Filename on construction: ' + this.file);
+      this.extContext = context;
    }
 
    /**
     * Запускает процесс создания шаблона
     */
-   public createTemplate(): boolean {
+   public createTemplate(){
       // Проверка файла на валидность:
       let possibleOptions = this.checkFile(); // Должны быть получены возможные варианты параметров шаблона
       if(!possibleOptions) {
@@ -32,15 +36,23 @@ export class Creator {
          return false;
       }
       // Пользователь делает свой выбор:
-      const userChoice = new UserChoice(possibleOptions);
-      let selectedOptions = userChoice.chooseOption();
+      const userChoice = new UserChoice(possibleOptions, this.extContext);
+      let listener = this.receiverUserOptions;
+      userChoice.chooseOption(listener, this.file);
+   }
+
+   private receiverUserOptions(selectedOptions: any, fileName: string) 
+   {
       if(!selectedOptions) {
          console.error('Options not recieved from the user!');
-         return false;
       }
       // Отрисовка шаблона в редакторе файла:
-      const insertor = new Insertor(selectedOptions, this.file);
-      return insertor.applyTemplate();
+      // console.log('receiverUserOptions: ' + fileName);
+      const insertor = new Insertor(selectedOptions, fileName);
+      insertor.applyTemplate();
+      vscode.window.showInformationMessage('Template Created!');
+	   console.log('Template Successfully Created!');
+      //return insertor.applyTemplate();
    }
 
    /**

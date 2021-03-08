@@ -1,6 +1,7 @@
 //import { settings } from "cluster";
 import { TemplatePrototypeHandler } from "./templateprototypehandler";
 import * as path from 'path';
+import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 
 export class Insertor {
@@ -15,6 +16,7 @@ export class Insertor {
    constructor(options: any, fileName: string) {
       this.settings = this.mapGenerator(options);
       this.file = fileName;
+      // console.log('Filename on construction: ' + this.file);
    }
 
    /**
@@ -47,24 +49,64 @@ export class Insertor {
       return fileName;
    }
 
-   private readPrototypeFile(fileName: string): string {
-      let content: string = '';
-      try {
-         content = readFileSync(fileName, 'utf8');
-      } catch (error) {
-         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Template prototype file read error occur! fileName = '+fileName);
-      }
-
-      return content;
-   }
-
    /**
     * Вставляет обработанный шаблон в открытый в эдиторе файл
     * @param template Текст шаблона
     */
    private insertToEditor(template: string): boolean {
-      
-      return false;
+      let pos = new vscode.Position(0,0);
+	   // let activeEditor = vscode.window.activeTextEditor;
+      let editor = this.findEditor();
+      // console.log(template);
+      if (!editor) {
+         vscode.window.showErrorMessage('Active editor not exist!');
+         return false;
+      }
+      editor.edit( e => {
+         e.insert(pos,template);
+         //vscode.TextEdit.insert(pos,'ypa!!!');
+         vscode.window.showInformationMessage('is work?');
+      });
+
+      return true;
+   }
+
+   private findEditor(): vscode.TextEditor | undefined {
+      let editor: vscode.TextEditor = Object();
+      let editors = vscode.window.visibleTextEditors;
+      let documents = vscode.workspace.textDocuments;
+      // documents.forEach(document => {
+      //    console.log('document = ' + document.fileName);
+      // });
+
+      if (documents.length === 0) {
+         console.error('No one open documents here!');
+      } else {
+         // console.log('this file = ' + this.file);
+         for (let i = 0; i < documents.length; i++) {
+            //document = documents[i];
+            // console.log('editor[' + i + '] = ' + editor.document.fileName);
+            if (documents[i].fileName === this.file) {               
+               vscode.window.showTextDocument(documents[i],vscode.ViewColumn.One);
+               // return vscode.window.activeTextEditor;
+            }
+         }
+      }
+
+      if (editors.length === 0) {
+         console.error('No one visible editors here!');
+      } else {
+         // console.log('this file = ' + this.file);
+         for (let i = 0; i < editors.length; i++) {
+            editor = editors[i];
+            // console.log('editor[' + i + '] = ' + editor.document.fileName);
+            if (editor.document.fileName === this.file) {
+               return editor;
+            }
+         }
+      }
+
+      console.error('Editor not found!');
    }
 
    /**
