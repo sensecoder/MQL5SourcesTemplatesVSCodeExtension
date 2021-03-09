@@ -1,3 +1,44 @@
-p {
+.canvas {
    font-size: var(--vscode-editor-font-size);
+}
+
+.keyColumn {
+   text-align: right;
+}
+
+.equalColumn {
+   padding: 5px 5px;
+}
+
+.valueColumn {
+   width: 100%;
+}
+
+table {
+   width: 100%;
+   padding-left: 10px;
+   padding-top: 5px;
+}
+
+.btnDiv {
+   width: 63%;
+   min-width: fit-content;
+   margin: 0px auto;
+}
+
+footer {
+   padding-top: 20px;
+   padding-bottom: 10px;
+   position: sticky;
+   bottom: 0;
+   z-index: 1;
+   background-color: var(--vscode-editor-background);
+}
+
+.btnCancel {
+   background-color: rgb(146, 72, 48);
+}
+
+.btnCancel:hover {
+   background-color: rgb(146, 48, 48);
 }

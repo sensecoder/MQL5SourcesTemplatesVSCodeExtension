@@ -51,6 +51,10 @@ export class UserChoice {
                      //listener(this.settings);
                      //return this.settings;
                   break;
+               case 'cancel':
+                     console.log(message.text);
+                     panel.dispose();
+                  break;
             
                default:
                   break;
@@ -135,12 +139,16 @@ export class UserChoice {
             <title>User dialog</title>
          </head>
          <body>
-            <h1 class="head-text">User accept settings heres...<h1>
+            <h1 class="head-text">Loose script handler...<h1>
                <div class="canvas">
                   
                </div>
-            <button onclick="btnAcceptClick()" type="button">Accept!</button>
-   
+               
+            <footer>
+               <div class="btnDiv">
+                  <button onclick="onCancel()" class="btnCancel" type="button">Cancel (leave blank)</button>
+               </div>
+            </footer>
             <script src="${scriptUri}">
             </script>
          </body>

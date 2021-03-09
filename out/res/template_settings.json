@@ -7,7 +7,12 @@
       "mq5": {
          "Templates": {
             "Expert": {
-               "PrototypeFileName": "mql5_expert.tmp",
+               "PrototypeFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "Value":"mql5_expert.tmp"
+               },
                "IncludeDescription": false,
                "OnTimer": false,
                "OnTrade": false,
@@ -24,13 +29,51 @@
       "mqh": {
          "Templates": {
             "Class": {
-               "PrototypeFileName": "mql5_class.tmp",
-               "IncludeDescription": false,
+               "PrototypeFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "PrototypeFileName":"mql5_class.tmp"
+               },
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxActivateField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description:",
+                        "content": {
+                           "container": "textEdit",
+                           "value": "Description"
+                        }
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": ""
+               },               
                "ClassName":"$FileName",
-               "Extend": false,
-               "ExtendModifier": [
-                  "public", "protected", "private"
-               ]
+               "ExtendClass": {
+                  "UserPresentation": {
+                     "checkBoxActivateField": {
+                        "checker": "Extend",
+                        "caption": "Parent class extend:",
+                        "content": [
+                           {
+                              "container":"valueEdit",
+                              "value":"RootClassName"
+                           },
+                           {
+                              "container": "dropBox",
+                              "caption": "Modifier:",
+                              "value": "ExtendModifier"
+                           }
+                        ]
+                     }
+                  },
+                  "Extend": false,
+                  "ExtendModifier": [
+                     "public", "protected", "private"
+                  ],
+                  "RootClassName":"RootClassName"
+               }
             }
          }
       }
