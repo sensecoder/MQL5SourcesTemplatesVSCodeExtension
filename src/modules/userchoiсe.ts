@@ -127,7 +127,7 @@ export class UserChoice {
             <meta charset="UTF-8">
              
             <!-- Fuck this shit! 
-            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-';"> 
+            <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src ${webview.cspSource};"> 
             -->
 
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -139,20 +139,21 @@ export class UserChoice {
             <title>User dialog</title>
          </head>
          <body>
-            <h1 class="head-text">Loose script handler...<h1>
-               <div class="canvas">
-                  
+            <h1 class="head-text">Loose script handler... <h1>
+               <div id="test">
                </div>
-               
+               <div class="canvas">
+               </div>         
             <footer>
                <div class="btnDiv">
                   <button onclick="onCancel()" class="btnCancel" type="button">Cancel (leave blank)</button>
                </div>
             </footer>
-            <script src="${scriptUri}">
+            <script src="${scriptUri}">                      
             </script>
          </body>
       </html>`;
+      //src="${scriptUri}"
       // try {
       //    content = readFileSync(file, 'utf8');
       // } catch (error) {

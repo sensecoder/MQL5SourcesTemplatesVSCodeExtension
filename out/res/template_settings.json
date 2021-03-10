@@ -37,22 +37,24 @@
                },
                "Description": {
                   "UserPresentation": {
-                     "checkBoxActivateField": {
+                     "checkBoxField": {
                         "checker": "IncludeDescription",
                         "caption": "Include description:",
-                        "content": {
-                           "container": "textEdit",
-                           "value": "Description"
-                        }
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
                      }
                   },
                   "IncludeDescription": false,
-                  "Description": ""
+                  "Description": "NoneDescription"
                },               
                "ClassName":"$FileName",
                "ExtendClass": {
                   "UserPresentation": {
-                     "checkBoxActivateField": {
+                     "checkBoxField": {
                         "checker": "Extend",
                         "caption": "Parent class extend:",
                         "content": [

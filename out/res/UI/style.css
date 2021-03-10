@@ -42,3 +42,13 @@ footer {
 .btnCancel:hover {
    background-color: rgb(146, 48, 48);
 }
+
+label {
+   padding-left: 3px;
+}
+
+.checkersAreaValue {
+   padding-left: 30px;
+   padding-top: 2px;
+}
+
