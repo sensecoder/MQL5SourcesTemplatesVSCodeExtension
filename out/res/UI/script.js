@@ -234,7 +234,7 @@ function getValue(key,arrKeyVal) {
    let value = '';
    arrKeyVal.forEach(element => {
       if(key === element.key.toString()) {
-         value = element.value.toString();
+         value = element.value;
       }
    });
    return value;
@@ -271,9 +271,61 @@ function makeCheckBoxField(element,params) {
                let text = getValue(element.value,params);
                content.innerText = text;
             break;
+         case 'valueEdit':
+               content = document.createElement('table');
+               let trVE = document.createElement('tr');
+               var tdKey = document.createElement('td',);
+               tdKey.className = 'keyColumn';
+               var tdValue = document.createElement('td');
+               tdValue.className = 'valueColumn';
+               var tdEqual = document.createElement('td');
+               tdEqual.className = 'equalColumn';
+               tdKey.innerText = element.value;
+               //tdValue.innerText = element.toString();
+               tdEqual.innerText = '=';
+               var inputValue = document.createElement('input');
+               inputValue.id = element.value;
+               inputValue.type = 'text';
+               inputValue.value = getValue(element.value,params);
+               tdValue.appendChild(inputValue);
+               trVE.appendChild(tdKey);
+               trVE.appendChild(tdEqual);
+               trVE.appendChild(tdValue);
+               content.appendChild(trVE);
+            break;
+         case 'select':
+               content = document.createElement('table');
+               content.className = 'select';
+               let trS = document.createElement('tr');
+               let tdCaption = document.createElement('td');
+               tdCaption.className = 'caption';
+               let tdSelect = document.createElement('td');
+               // tdSelect.className = 'select';
+               if(Object.hasOwnProperty.call(element, 'caption')) {
+                  tdCaption.innerText = element.caption;
+               }
+               let sel = document.createElement('select');
+               sel.name = element.value;
+               let options = getValue(element.value,params);
+               let selectedVal = getValue(element.selectedValue,params);
+               options.forEach(val => {
+                  let option = document.createElement('option');
+                  option.value = val;
+                  option.innerText = val;
+                  if(val === selectedVal) {
+                     option.selected = true;
+                  }
+                  sel.appendChild(option);
+               });
+               //toTest(getValue(element.value,params));
+               tdSelect.appendChild(sel);
+               trS.appendChild(tdCaption);
+               trS.appendChild(tdSelect);
+               content.appendChild(trS);
+            break;
       
          default:
-            divValue.innerText = 'value';
+            //divValue.innerText = 'value';
             break;
       }
       if(content !== null) {

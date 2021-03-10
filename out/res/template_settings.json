@@ -63,9 +63,10 @@
                               "value":"RootClassName"
                            },
                            {
-                              "container": "dropBox",
+                              "container": "select",
                               "caption": "Modifier:",
-                              "value": "ExtendModifier"
+                              "value": "ExtendModifier",
+                              "selectedValue": "Modifier"
                            }
                         ]
                      }
@@ -74,6 +75,7 @@
                   "ExtendModifier": [
                      "public", "protected", "private"
                   ],
+                  "Modifier": "public",
                   "RootClassName":"RootClassName"
                }
             }

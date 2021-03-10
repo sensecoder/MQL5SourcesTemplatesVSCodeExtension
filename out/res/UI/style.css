@@ -52,3 +52,10 @@ label {
    padding-top: 2px;
 }
 
+textarea {
+   resize: none;
+}
+
+.select {
+   width: fit-content;
+}
