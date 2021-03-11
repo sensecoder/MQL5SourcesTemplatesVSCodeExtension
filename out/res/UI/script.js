@@ -2,9 +2,73 @@ vscode = acquireVsCodeApi();
 templateSettings = {};
 
 function btnAcceptClick() {   
+   let data = {};
+   let elements = document.getElementsByClassName('Data');
+   
+   for (i = 0; i < elements.length; i++) {
+      let typeName = elements[i].nodeName;
+      switch (typeName) {
+         case 'INPUT':
+               let type = elements[i].type;
+               switch (type) {
+                  // case 'text':
+                  //       data[elements[i].id] = elements[i].value;
+                  //    break;
+                  case 'checkbox':
+                        data[elements[i].id] = elements[i].checked;
+                     break;
+               
+                  default:
+                        data[elements[i].id] = elements[i].value;
+                     break;
+               }
+            break;
+
+         // case 'TEXTAREA':
+         //       data[elements[i].id] = elements[i].value;
+         //    break;
+               
+         case 'OPTION':
+               if (elements[i].selected) {
+                  data[elements[i].id] = elements[i].value;
+               }
+            break;
+
+         default:
+               data[elements[i].id] = elements[i].value;
+            break;
+      }
+   }
+
+      // let inputType = '';
+      // let id = elements[i].id;
+      // if (typeName === 'INPUT') {
+      //    inputType = elements[i].type;
+      // }
+      // if (typeName === 'OPTION') {
+      //    if (elements[i].selected) {
+      //       inputType = elements[i].value;
+      //    }
+      // }
+      // toTest(typeName + ' ' + inputType + ' ' + id);
+   
+   // Need prototype filename
+   JSON.stringify(templateSettings, (key, value) => {
+      if(value !== '{}') {
+         if (key === 'PrototypeFileName') {
+            data[key] = value;
+         }
+      }
+      return value;
+   });
+
+   // let testStr = JSON.stringify(data);
+   // toTest(testStr);
+
    vscode.postMessage({
       command: 'accept',
-      text: 'Settings accepted!'
+      text: 'Settings accepted!',
+      settings: data
    });
 }
 
@@ -79,6 +143,7 @@ function showGeneral() {
             tdEqual.innerText = '=';
             var inputValue = document.createElement('input');
             inputValue.id = key.toString();
+            inputValue.className = 'Data';
             inputValue.type = 'text';
             inputValue.value = element.toString();
             // if (!focused) {
@@ -158,6 +223,7 @@ function onTemplateSelected(templateName) {
                tdEqual.innerText = '=';
                var inputValue = document.createElement('input');
                inputValue.id = key.toString();
+               inputValue.className = 'Data';
                inputValue.type = 'text';
                inputValue.value = element.toString();
                tdValue.appendChild(inputValue);
@@ -172,6 +238,15 @@ function onTemplateSelected(templateName) {
             // }
          }
       }
+      let btnDiv = document.createElement('div');
+      btnDiv.className = 'btnDiv';
+      let btnAccept = document.createElement('button');
+      btnAccept.innerText = 'Accept!';
+      btnAccept.addEventListener('click',() => {
+         btnAcceptClick();
+      });
+      btnDiv.appendChild(btnAccept);
+      templateSetupArea.appendChild(btnDiv);
    }
 }
 
@@ -231,7 +306,7 @@ function toTest(text) {
 }
 
 function getValue(key,arrKeyVal) {
-   let value = '';
+   let value;
    arrKeyVal.forEach(element => {
       if(key === element.key.toString()) {
          value = element.value;
@@ -253,9 +328,10 @@ function makeCheckBoxField(element,params) {
    checkBox = document.createElement('input');
    checkBox.type = 'checkbox';
    checkBox.id = element.checker;
-   // checkBox.addEventListener('click',() => {
-   //    onCheckBoxClick(element.checker,divValue.id);
-   // });
+   checkBox.className = 'Data';
+   checkBox.addEventListener('click',() => {
+      onCheckBoxClick(element.checker,element.checker+'Value');
+   });
    label = document.createElement('label');
    label.setAttribute('for',element.checker);
    label.innerText = element.caption;
@@ -270,6 +346,8 @@ function makeCheckBoxField(element,params) {
                content.rows = 3;
                let text = getValue(element.value,params);
                content.innerText = text;
+               content.id = element.value;
+               content.className = 'Data';
             break;
          case 'valueEdit':
                content = document.createElement('table');
@@ -285,6 +363,7 @@ function makeCheckBoxField(element,params) {
                tdEqual.innerText = '=';
                var inputValue = document.createElement('input');
                inputValue.id = element.value;
+               inputValue.className = 'Data';
                inputValue.type = 'text';
                inputValue.value = getValue(element.value,params);
                tdValue.appendChild(inputValue);
@@ -311,6 +390,8 @@ function makeCheckBoxField(element,params) {
                options.forEach(val => {
                   let option = document.createElement('option');
                   option.value = val;
+                  option.id = element.selectedValue;
+                  option.className = 'Data';
                   option.innerText = val;
                   if(val === selectedVal) {
                      option.selected = true;
@@ -330,6 +411,9 @@ function makeCheckBoxField(element,params) {
       }
       if(content !== null) {
          divValue.appendChild(content);
+         if (!getValue(element.checker,params)) {
+            divValue.style.display = 'none';
+         }
       }
    });
 
@@ -344,10 +428,17 @@ function makeCheckBoxField(element,params) {
 /**
  * Handler of check box click event
  * @param {*} checkerId CheckBox element id
- * @param {*} dependedElemIdsArr Array of depended elements id
+ * @param {*} valueDivId Id of block with documents element need to hide or show
  */
-function onCheckBoxClick(checkerId, dependedElemIdsArr) {
-
+function onCheckBoxClick(checkerId, valueDivId) {
+   // toTest('here! checkerId='+checkerId+' valueDivId='+valueDivId);
+   checker = document.getElementById(checkerId);
+   valueDiv = document.getElementById(valueDivId);
+   if (checker.checked) {
+      valueDiv.style.display = 'block';
+   } else {
+      valueDiv.style.display = 'none';
+   }
 }
 
 /**

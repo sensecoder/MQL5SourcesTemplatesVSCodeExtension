@@ -46,6 +46,7 @@ export class UserChoice {
          message => {
             switch (message.command) {
                case 'accept':
+                     this.settings = message.settings;
                      this.onUserAccept();
                      panel.dispose();
                      //listener(this.settings);
