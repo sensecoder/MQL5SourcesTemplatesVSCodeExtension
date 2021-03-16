@@ -1,22 +1,19 @@
 //+------------------------------------------------------------------+
-//|                                              <{FileName inHead}> |
-//|                                             <{Copyright inHead}> |
-//|                                                  <{Link inHead}> |
+//|                               <{FileNameFull inMQLHeadStandard}> |
+//|                                  <{Copyright inMQLHeadStandard}> |
+//|                                       <{Link inMQLHeadStandard}> |
 //+------------------------------------------------------------------+
 #property copyright "<{Copyright}>"
 #property link      "<{Link}>"
 #property version   "<{Version = 1.00}>"
 
-<{Optional if IncludeDescription}>
-<{Description}>
-<{/Optional}>
-
-class <{ClassName}> <{Optional if Extend}>: <{ExtendModifier = public}> <{RootClassName}><{/Optional}> {
+<{Optional if IncludeDescription}><{Description inMQLCommentBlockStandard}><{/Optional}>
+class <{ClassName}> <{Optional if Extend}>: <{Modifier}> <{RootClassName}> <{/Optional}>{
 private:
 
 public:
    <{ClassName}>();
-   ~<{ClassName}>();
+  ~<{ClassName}>();
 };
 
 //+------------------------------------------------------------------+
@@ -26,7 +23,7 @@ public:
 }
 
 //+------------------------------------------------------------------+
-//| Destructors:                                                     |
+//| Destructor:                                                      |
 //+------------------------------------------------------------------+
 <{ClassName}>::~<{ClassName}>() {
 }

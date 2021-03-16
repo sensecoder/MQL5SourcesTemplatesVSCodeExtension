@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 //import { settings } from 'cluster';
 import { readFileSync } from 'fs';
 import * as vscode from 'vscode';
@@ -74,18 +75,18 @@ export class UserChoice {
    private showHeadToUserAndSetFile() {
       let fileName = this.file.substr(this.file.lastIndexOf('\\')+1);
       // console.log(' fileName = ' + fileName);
-      let strFileName = '{"FileNameFull":"'+fileName+'","FileName":"'+fileName.substr(0,fileName.lastIndexOf('.'))+'"}';
+      let fileNameObj = {FileNameFull:fileName,FileName:fileName.substr(0,fileName.lastIndexOf('.'))};
       // console.log('strFileName = ' + strFileName);
       // let command = '{"command":"SetFileName","content":'+strFileName+'}';
-      this.currentPanel?.webview.postMessage({command:'SetFileName',content:strFileName});
+      this.currentPanel?.webview.postMessage({command:'SetFileName',content:fileNameObj});
    }
    
    private setSettingsToPanel(){
       if(!this.settings){
          console.error(this.errorHead() + ' No settigs here!');
       }
-      let settingsStr = JSON.stringify(this.settings);
-      this.currentPanel?.webview.postMessage({command:'SetTemplateSettings',content:settingsStr});
+      // let settingsStr = JSON.stringify(this.settings);
+      this.currentPanel?.webview.postMessage({command:'SetTemplateSettings',content:this.settings});
       // console.log(settingsStr);
 
    }

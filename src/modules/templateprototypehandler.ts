@@ -9,8 +9,9 @@ const BLOCK_MACROS_END = '<{/'; // Завершающая скобка блок�
 
 // Зарезервированные токены:
 enum ReservedTokens {
-   'Optional',       // Определяет блок текста в прототипе, который может отстутствовать. Используется в семантике с условием (r+o+v). Блок текста заканчивается обязательным закрывающим токеном /Optional.
-   'inHead'          // Является параметром к переменной, указывающим что она находится в "шапке файла" (что является явным задротством) и поэтому переменную нужно расположить так, чтобы не нарушить прекрасный строй шапки.
+   'Optional',                   // Определяет блок текста в прототипе, который может отстутствовать. Используется в семантике с условием (r+o+v). Блок текста заканчивается обязательным закрывающим токеном /Optional.
+   'inMQLHeadStandard',          // Является параметром к переменной, указывающим что она находится в "шапке файла" (что является явным задротством) и поэтому переменную нужно расположить так, чтобы не нарушить прекрасный строй шапки.
+   'inMQLCommentBlockStandard'   // Указывает, что прежде чем разместить переменную в тексте, её необходимо "обернуть" в блок комментариев
 }
 // Токены операторы:
 enum OperatorsTokens {
@@ -54,6 +55,7 @@ export class TemplatePrototypeHandler {
 
    /**
     * Модифицирует переданый объекту класса прототип шаблона в соответствии с параметрами.
+    * И возвращает готовый для вставки шаблон.
     */
    public modifyPrototype(): string {
       if (this.protoText === '') {
@@ -192,8 +194,11 @@ export class TemplatePrototypeHandler {
                this.action = this.insertVariable;
             break;
          case 'v+r':
-               if (wordsArr[1] === 'inHead') {
-                  this.action = this.insertVariableInHead;
+               if (wordsArr[1] === 'inMQLHeadStandard') {
+                  this.action = this.insertVariableInMQLHeadStandard;
+               };
+               if (wordsArr[1] === 'inMQLCommentBlockStandard') {
+                  this.action = this.insertVariableInMQLCommentBlockStandard;
                }
             break;
          case 'v+o+v':
@@ -235,7 +240,7 @@ export class TemplatePrototypeHandler {
             if ((i+BLOCK_MACROS_END.length+wordsArr[0].length+MACROS_CLOSE.length) < this.protoText.length) {
                let blockEndWord = this.protoText.substr(i,(BLOCK_MACROS_END.length+wordsArr[0].length+MACROS_CLOSE.length));
                if(blockEndWord === (BLOCK_MACROS_END+wordsArr[0]+MACROS_CLOSE)){
-                  blockEnd = i + blockEndWord.length;
+                  blockEnd = i + blockEndWord.length-1;
                   break;
                } else {
                   blockText = blockText + this.protoText[i];
@@ -254,6 +259,7 @@ export class TemplatePrototypeHandler {
       let variable = wordsArr[2];
       let condition = false;
       if (this.tokensParams.has(variable)) {
+         // console.log('variable = ' + variable + ' params = ' + this.tokensParams.get(variable));
          condition = <boolean>this.tokensParams.get(variable);
       } else {
          if (variable.toLowerCase() === 'true') {
@@ -262,6 +268,31 @@ export class TemplatePrototypeHandler {
       }
       if (condition) {
          // In first, need to handle whith care this text block...
+         let modifiedBlockText = '';
+         let handler = new TemplatePrototypeHandler('',this.tokensParams,blockText);
+         modifiedBlockText = handler.modifyPrototype();
+         this.modifiedText = this.modifiedText + modifiedBlockText;
+      } else {
+         // In this case need to check on end of line in template prototype and remove "blockEnd" position behind them
+         i = blockEnd + 1; // F***ing + 1
+         while (i < this.protoText.length) {
+            if(this.protoText[i] !== ' ') { // Spaces ignores
+               // console.log('here! text = "' + this.protoText[i] +'"');
+               if(this.protoText[i] === '\r' || this.protoText[i] === '\n') {
+                  // console.log('maybe here?');
+                  if(this.protoText[i+1] === '\n') {
+                     blockEnd = i+1;
+                     break;
+                  } else {
+                     blockEnd = i;
+                     break;
+                  }
+               } else {
+                  break;
+               }
+            }
+            i++;
+         }
       }
 
       return blockEnd;
@@ -305,12 +336,79 @@ export class TemplatePrototypeHandler {
       return indx;
    }
 
+   private cutFirstLineOfText(text: string, lineLen: number): string {
+      let line = text;
+      if(line.length > lineLen) {
+         if(line[lineLen] !== ' ') {
+            // Try to cut by word
+            let lastWordBegin = line.lastIndexOf(' ', lineLen);
+            if (lastWordBegin > 0) {
+               line = line.substr(0, lastWordBegin);
+            } else {
+               // Hard cut
+               line = line.substr(0, lineLen);
+            }
+         } else {
+            line = line.substr(0, lineLen);
+         }
+      }
+      // Check in line linebreak symbol:
+      for (let i = 0; i < line.length; i++) {
+         const symb = line[i];
+         if(line[i] === '\r' || line[i] === '\n') {
+            line = line.substr(0,i);
+         } 
+      }
+
+      return line.trimRight();
+   }
+
    /**
-    * Действие вставки переменной со сдвигом влево (в заголовке шаблона)
+    * Inserting text from wordsArr[0] variable with comment block decoration like in classic MQL
+    * @param wordsArr 
+    * @param indx 
+    * @returns 
+    */
+   private insertVariableInMQLCommentBlockStandard(wordsArr: Array<string>, indx: number): number {
+      let variable = wordsArr[0];
+      let insertedText = '';
+      
+      if (this.tokensParams.has(variable)) {
+         variable = <string>this.tokensParams.get(variable);
+      }
+
+      let strTopBottom = "//+------------------------------------------------------------------+";
+      insertedText = insertedText + strTopBottom + '\r\n';
+      let symbolsInLine = 64;
+      while (variable.length > 0) {
+         // Lets cut text of comment to appropriate len of line
+         let line = this.cutFirstLineOfText(variable,symbolsInLine);
+         if(variable.length > line.length) {
+            variable = variable.substr(line.length);
+            variable = variable.trim();
+         } else {
+            variable = '';
+         }
+         if (line.length < symbolsInLine) {
+            let needSpaces = symbolsInLine - line.length;
+            for (let i = 0; i < needSpaces; i++) {
+               line = line + ' ';
+            }
+         }
+         insertedText = insertedText + '//| ' + line + ' |\r\n';
+      }
+      insertedText = insertedText + strTopBottom; // Final!
+
+      this.modifiedText = this.modifiedText + insertedText;
+      return indx;
+   }
+   
+   /**
+    * Действие вставки переменной со сдвигом влево (в стандартном для MQL заголовке шаблона)
     * @param wordsArr 
     * @param indx 
     */
-   private insertVariableInHead(wordsArr: Array<string>, indx: number): number {
+   private insertVariableInMQLHeadStandard(wordsArr: Array<string>, indx: number): number {
       let variable = wordsArr[0];
       
       if (this.tokensParams.has(variable)) {

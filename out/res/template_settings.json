@@ -11,18 +11,112 @@
                   "UserPresentation": {
                      "hide": true
                   },
-                  "Value":"mql5_expert.tmp"
+                  "PrototypeFileName":"mql5_expert.tmp"
                },
-               "IncludeDescription": false,
-               "OnTimer": false,
-               "OnTrade": false,
-               "OnTradeTransaction": false,
-               "OnTester": false,
-               "OnTesterInit": false,
-               "OnTesterPass": false,
-               "OnTesterDeinit": false,
-               "OnChartEvent": true,
-               "OnBookEvent": false
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description:",
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": "None $FileName Description"
+               },
+               "OnTimer": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTimer",
+                        "caption": "Include OnTimer() function",
+                        "content": [
+                           {
+                              "container": "valueEdit",
+                              "value": "TimerSetting"
+                           }
+                        ]
+                     }
+                  },
+                  "OnTimer": false,
+                  "TimerSetting": 60
+               },
+               "OnTrade": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTrade",
+                        "caption": "Include OnTrade() function"
+                     }
+                  },
+                  "OnTrade": false
+               },
+               "OnTradeTransaction": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTradeTransaction",
+                        "caption": "Include OnTradeTransaction() function"
+                     }
+                  },
+                  "OnTradeTransaction": false
+               },
+               "OnTester": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTester",
+                        "caption": "Include OnTester() function"
+                     }
+                  },
+                  "OnTester": false
+               },
+               "OnTesterInit": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTesterInit",
+                        "caption": "Include OnTesterInit() function"
+                     }
+                  },
+                  "OnTesterInit": false
+               },
+               "OnTesterPass": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTesterPass",
+                        "caption": "Include OnTesterPass() function"
+                     }
+                  },
+                  "OnTesterPass": false
+               },
+               "OnTesterDeinit": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTesterDeinit",
+                        "caption": "Include OnTesterDeinit() function"
+                     }
+                  },
+                  "OnTesterDeinit": false
+               },
+               "OnChartEvent": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnChartEvent",
+                        "caption": "Include OnChartEvent() function"
+                     }
+                  },
+                  "OnChartEvent": false
+               },
+               "OnBookEvent": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnBookEvent",
+                        "caption": "Include OnBookEvent() function"
+                     }
+                  },
+                  "OnBookEvent": false
+               }
             }
          }
       },
@@ -49,7 +143,7 @@
                      }
                   },
                   "IncludeDescription": false,
-                  "Description": "NoneDescription"
+                  "Description": "None $FileName Description"
                },               
                "ClassName":"$FileName",
                "ExtendClass": {

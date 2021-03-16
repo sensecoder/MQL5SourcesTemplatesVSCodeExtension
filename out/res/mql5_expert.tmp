@@ -1,16 +1,13 @@
 //+------------------------------------------------------------------+
-//|                                              <{FileName inHead}> |
-//|                                             <{Copyright inHead}> |
-//|                                                  <{Link inHead}> |
+//|                               <{FileNameFull inMQLHeadStandard}> |
+//|                                  <{Copyright inMQLHeadStandard}> |
+//|                                       <{Link inMQLHeadStandard}> |
 //+------------------------------------------------------------------+
 #property copyright "<{Copyright}>"
 #property link      "<{Link}>"
 #property version   "<{Version = 1.00}>"
 
-<{Optional if IncludeDescription}>
-<{Description}>
-<{/Optional}>
-
+<{Optional if IncludeDescription}><{Description inMQLCommentBlockStandard}><{/Optional}>
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
@@ -18,8 +15,7 @@ int OnInit() {
 <{Optional if OnTimer}>
 //--- create timer
    EventSetTimer(<{TimerSetting = 60}>);
-<{/Optional}>
-   
+<{/Optional}>   
 //---
    return(INIT_SUCCEEDED);
 }
@@ -40,7 +36,6 @@ void OnDeinit(const int reason) {
 void OnTick() {
    
 }
-
 <{Optional if OnTimer}>
 //+------------------------------------------------------------------+
 //| Timer function                                                   |
@@ -49,7 +44,6 @@ void OnTimer() {
 
 }
 <{/Optional}>
-
 <{Optional if OnTrade}>
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
@@ -58,7 +52,6 @@ void OnTrade() {
 
 }
 <{/Optional}>
-
 <{Optional if OnTradeTransaction}>
 //+------------------------------------------------------------------+
 //| TradeTransaction function                                        |
@@ -69,7 +62,6 @@ void OnTradeTransaction(const MqlTradeTransaction& trans,
 
 }
 <{/Optional}>
-
 <{Optional if OnTester}>
 //+------------------------------------------------------------------+
 //| Tester function                                                  |
@@ -80,7 +72,6 @@ double OnTester() {
    return(ret);
 }
 <{/Optional}>
-
 <{Optional if OnTesterInit}>
 //+------------------------------------------------------------------+
 //| TesterInit function                                              |
@@ -89,7 +80,6 @@ void OnTesterInit() {
    
 }
 <{/Optional}>
-
 <{Optional if OnTesterPass}>
 //+------------------------------------------------------------------+
 //| TesterPass function                                              |
@@ -98,7 +88,6 @@ void OnTesterPass() {
    
 }
 <{/Optional}>
-
 <{Optional if OnTesterDeinit}>
 //+------------------------------------------------------------------+
 //| TesterDeinit function                                            |
@@ -107,7 +96,6 @@ void OnTesterDeinit() {
    
 }
 <{/Optional}>
-
 <{Optional if OnChartEvent}>
 //+------------------------------------------------------------------+
 //| ChartEvent function                                              |
@@ -119,7 +107,6 @@ void OnChartEvent(const int id,
    
 }
 <{/Optional}>
-
 <{Optional if OnBookEvent}>
 //+------------------------------------------------------------------+
 //| BookEvent function                                               |

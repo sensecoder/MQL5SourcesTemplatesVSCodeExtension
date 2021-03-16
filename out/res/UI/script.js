@@ -1,8 +1,10 @@
 vscode = acquireVsCodeApi();
+fileNameObj = {};
 templateSettings = {};
+data = {};
 
 function btnAcceptClick() {   
-   let data = {};
+   //let data = {};
    let elements = document.getElementsByClassName('Data');
    
    for (i = 0; i < elements.length; i++) {
@@ -52,15 +54,15 @@ function btnAcceptClick() {
       // }
       // toTest(typeName + ' ' + inputType + ' ' + id);
    
-   // Need prototype filename
-   JSON.stringify(templateSettings, (key, value) => {
-      if(value !== '{}') {
-         if (key === 'PrototypeFileName') {
-            data[key] = value;
-         }
-      }
-      return value;
-   });
+   // // Need prototype filename
+   // JSON.stringify(templateSettings, (key, value) => {
+   //    if(value !== '{}') {
+   //       if (key === 'PrototypeFileName') {
+   //          data[key] = value;
+   //       }
+   //    }
+   //    return value;
+   // });
 
    // let testStr = JSON.stringify(data);
    // toTest(testStr);
@@ -79,9 +81,10 @@ function btnAcceptClick() {
 function showHeader(fileName) {
    const header = document.getElementsByClassName('head-text');
    //header.textContent = 'Detect';
-   let fileStruct = JSON.parse(fileName);
-   header[0].textContent = 'Detect new created file: '+fileStruct.FileNameFull;
-   templateSettings.fileName = fileStruct;
+   // let fileStruct = JSON.parse(fileName);
+   fileNameObj = fileName;
+   header[0].textContent = 'Detect new created file: '+fileNameObj.FileNameFull;
+   // templateSettings.fileName = fileStruct;
    //this.showFileName(fileStruct.FileNameFull);
 }
 
@@ -90,12 +93,12 @@ function showHeader(fileName) {
  * @param {JSON} settings 
  */
 function setTemplateSettings(settings) {
-   let fileName = {};
-   if (templateSettings.fileName) {
-      fileName = templateSettings.fileName;
-   }
-   templateSettings = JSON.parse(settings);
-   templateSettings.fileName = fileName;
+   // let fileName = {};
+   // if (templateSettings.fileName) {
+   //    fileName = templateSettings.fileName;
+   // }
+   templateSettings = settings;
+   // templateSettings.fileName = fileName;
 }
 
 /**
@@ -186,12 +189,87 @@ function showTemplatesMenu() {
 }
 
 /**
+ * Add data from one object to another
+ * @param {*} toObj 
+ * @param {*} fromObj 
+ */
+function concatTemplateDataObj(toObj,fromObj) {
+   for (const key in fromObj) {
+      if (fromObj[key].toString() === '[object Object]') {
+         let objSet = fromObj[key];
+         if (Object.hasOwnProperty.call(objSet,'UserPresentation')) {
+            for (const key in objSet) {
+               if (objSet[key].toString() !== '[object Object]') {
+                  toObj[key] = objSet[key];
+                  // toTest(key+" + "+objSet[key]);      
+               }
+            }
+         }
+      } else {
+         toObj[key] = fromObj[key];
+         // toTest(key+" + "+fromObj[key]);
+      }
+   }
+}
+
+/**
+ * Generate data object with all needed params
+ * @param {*} templateName 
+ */
+function generateData(templateName) {
+   data = {};
+   concatTemplateDataObj(data,fileNameObj);
+   concatTemplateDataObj(data,templateSettings.General);
+   let tempSet = templateSettings.Templates[templateName];
+   concatTemplateDataObj(data,tempSet);
+}
+
+function getPrimalValue(key) {
+   if (Object.hasOwnProperty.call(data, key)) {
+      let value = data[key].toString();
+      // let value = '';
+      let pos = 0;
+      while (pos >= 0) {
+         pos = value.indexOf('$',pos);
+         if (pos >= 0) {
+            let start = pos;
+            pos = value.indexOf(' ',pos);
+            let possibleKey = '';
+            if(pos > 0) {
+               possibleKey = value.substr(start+1,pos-(start+1));
+            } else {
+               possibleKey = value.substr(start+1);
+            }
+            let substituteValue = possibleKey;
+            if (Object.hasOwnProperty.call(data, possibleKey)) {
+               substituteValue = data[possibleKey];
+            }
+            let begStr = value.substr(0,start);
+            let endStr = '';
+            if(pos > 0) {
+               endStr = value.substr(pos);
+            }
+            value = begStr + substituteValue + endStr;
+            if(pos > 0) {
+               pos = start + 1;
+            }
+         }  
+      }
+      return value;
+   }
+   else {
+      return '';
+   }
+}
+
+/**
  * Onclick templates menu button event handler
  * @param {*} templateName 
  */
 function onTemplateSelected(templateName) {
    const elem = document.getElementById('templatesMenuArea');
    elem.remove();
+   generateData(templateName);
    if(templateSettings.Templates){
       const canvas = document.getElementsByClassName('canvas');
       var templateSetupArea = document.createElement('div');
@@ -225,7 +303,7 @@ function onTemplateSelected(templateName) {
                inputValue.id = key.toString();
                inputValue.className = 'Data';
                inputValue.type = 'text';
-               inputValue.value = element.toString();
+               inputValue.value = getPrimalValue(key); //element.toString();
                tdValue.appendChild(inputValue);
                tr.appendChild(tdKey);
                tr.appendChild(tdEqual);
@@ -252,13 +330,13 @@ function onTemplateSelected(templateName) {
 
 function makePresentationElement(element) {
    let presentation = null;
-   let data = [];
+   let dataElem = [];
    for (const key in element) {
       if (Object.hasOwnProperty.call(element, key)) {
          if (key.toString() === 'UserPresentation') {
             presentation = element[key];
          } else {
-            data.push({key:key.toString(),value:element[key]});
+            dataElem.push({key:key.toString(),value:element[key]});
          }         
       }
    }
@@ -278,7 +356,7 @@ function makePresentationElement(element) {
                   return null;
                break;
             case 'checkBoxField':
-                  return makeCheckBoxField(element,data);
+                  return makeCheckBoxField(element,dataElem);
                break;
             default:
                   text = text + keyStr;
@@ -309,7 +387,7 @@ function getValue(key,arrKeyVal) {
    let value;
    arrKeyVal.forEach(element => {
       if(key === element.key.toString()) {
-         value = element.value;
+         value = element.value; // getPrimalValue(key);
       }
    });
    return value;
@@ -338,85 +416,88 @@ function makeCheckBoxField(element,params) {
    divChecker.appendChild(checkBox);
    divChecker.appendChild(label);
 
-   element.content.forEach(element => {
-      var content = null;
-      switch (element.container) {
-         case 'textarea':
-               content = document.createElement('textarea');
-               content.rows = 3;
-               let text = getValue(element.value,params);
-               content.innerText = text;
-               content.id = element.value;
-               content.className = 'Data';
-            break;
-         case 'valueEdit':
-               content = document.createElement('table');
-               let trVE = document.createElement('tr');
-               var tdKey = document.createElement('td',);
-               tdKey.className = 'keyColumn';
-               var tdValue = document.createElement('td');
-               tdValue.className = 'valueColumn';
-               var tdEqual = document.createElement('td');
-               tdEqual.className = 'equalColumn';
-               tdKey.innerText = element.value;
-               //tdValue.innerText = element.toString();
-               tdEqual.innerText = '=';
-               var inputValue = document.createElement('input');
-               inputValue.id = element.value;
-               inputValue.className = 'Data';
-               inputValue.type = 'text';
-               inputValue.value = getValue(element.value,params);
-               tdValue.appendChild(inputValue);
-               trVE.appendChild(tdKey);
-               trVE.appendChild(tdEqual);
-               trVE.appendChild(tdValue);
-               content.appendChild(trVE);
-            break;
-         case 'select':
-               content = document.createElement('table');
-               content.className = 'select';
-               let trS = document.createElement('tr');
-               let tdCaption = document.createElement('td');
-               tdCaption.className = 'caption';
-               let tdSelect = document.createElement('td');
-               // tdSelect.className = 'select';
-               if(Object.hasOwnProperty.call(element, 'caption')) {
-                  tdCaption.innerText = element.caption;
-               }
-               let sel = document.createElement('select');
-               sel.name = element.value;
-               let options = getValue(element.value,params);
-               let selectedVal = getValue(element.selectedValue,params);
-               options.forEach(val => {
-                  let option = document.createElement('option');
-                  option.value = val;
-                  option.id = element.selectedValue;
-                  option.className = 'Data';
-                  option.innerText = val;
-                  if(val === selectedVal) {
-                     option.selected = true;
+   if (Object.hasOwnProperty.call(element, 'content')) {
+      element.content.forEach(element => {
+         var content = null;
+         switch (element.container) {
+            case 'textarea':
+                  content = document.createElement('textarea');
+                  content.rows = 3;
+                  let text = getPrimalValue(element.value); // getValue(element.value,params);
+                  content.innerText = text;
+                  content.id = element.value;
+                  content.className = 'Data';
+               break;
+            case 'valueEdit':
+                  content = document.createElement('table');
+                  let trVE = document.createElement('tr');
+                  var tdKey = document.createElement('td',);
+                  tdKey.className = 'keyColumn';
+                  var tdValue = document.createElement('td');
+                  tdValue.className = 'valueColumn';
+                  var tdEqual = document.createElement('td');
+                  tdEqual.className = 'equalColumn';
+                  tdKey.innerText = element.value;
+                  //tdValue.innerText = element.toString();
+                  tdEqual.innerText = '=';
+                  var inputValue = document.createElement('input');
+                  inputValue.id = element.value;
+                  inputValue.className = 'Data';
+                  inputValue.type = 'text';
+                  inputValue.value = getPrimalValue(element.value); // getValue(element.value,params);
+                  tdValue.appendChild(inputValue);
+                  trVE.appendChild(tdKey);
+                  trVE.appendChild(tdEqual);
+                  trVE.appendChild(tdValue);
+                  content.appendChild(trVE);
+               break;
+            case 'select':
+                  content = document.createElement('table');
+                  content.className = 'select';
+                  let trS = document.createElement('tr');
+                  let tdCaption = document.createElement('td');
+                  tdCaption.className = 'caption';
+                  let tdSelect = document.createElement('td');
+                  // tdSelect.className = 'select';
+                  if(Object.hasOwnProperty.call(element, 'caption')) {
+                     tdCaption.innerText = element.caption;
                   }
-                  sel.appendChild(option);
-               });
-               //toTest(getValue(element.value,params));
-               tdSelect.appendChild(sel);
-               trS.appendChild(tdCaption);
-               trS.appendChild(tdSelect);
-               content.appendChild(trS);
-            break;
-      
-         default:
-            //divValue.innerText = 'value';
-            break;
-      }
-      if(content !== null) {
-         divValue.appendChild(content);
-         if (!getValue(element.checker,params)) {
-            divValue.style.display = 'none';
+                  let sel = document.createElement('select');
+                  sel.name = element.value;
+                  let options = getValue(element.value,params);
+                  let selectedVal = getPrimalValue(element.selectedValue); // getValue(element.selectedValue,params);
+                  options.forEach(val => {
+                     let option = document.createElement('option');
+                     option.value = val;
+                     option.id = element.selectedValue;
+                     option.className = 'Data';
+                     option.innerText = val;
+                     if(val === selectedVal) {
+                        option.selected = true;
+                     }
+                     sel.appendChild(option);
+                  });
+                  //toTest(getValue(element.value,params));
+                  tdSelect.appendChild(sel);
+                  trS.appendChild(tdCaption);
+                  trS.appendChild(tdSelect);
+                  content.appendChild(trS);
+               break;
+         
+            default:
+               //divValue.innerText = 'value';
+               break;
          }
-      }
-   });
-
+         if(content !== null) {
+            divValue.appendChild(content);
+            if (!getValue(element.checker,params)) {
+               divValue.style.display = 'none';
+            }
+         }
+      });
+   } else {
+      divValue.id = '';
+   }
    td.appendChild(divChecker);
    td.appendChild(divValue);
    //divValue.innerText = 'value';
