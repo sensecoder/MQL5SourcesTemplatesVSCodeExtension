@@ -1,8 +1,9 @@
 {
-	"name": "mql5sourcestemplate",
-	"displayName": "MQL5SourcesTemplates",
-	"description": "Sources templates for MQL5 programs.",
-	"version": "0.0.1",
+	"name": "mql5sourcefiletemplate",
+	"displayName": "MQL5SourceFilesTemplates",
+	"description": "Source files templates for MQL5 programs.",
+	"publisher": "SenseCoder",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.53.0"
 	},
