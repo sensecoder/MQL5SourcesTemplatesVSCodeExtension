@@ -4,7 +4,7 @@ import { readFile, readFileSync } from 'fs';
 import { dirname } from 'path';
 import { pathToFileURL } from 'url';
 import * as vscode from 'vscode';
-import { Creator } from "./modules/creator";
+import { Creator } from "./modules/v0.1/creator";
 
 // listener subscription
 let subscription: vscode.Disposable;
@@ -52,7 +52,7 @@ let listenerOfFileCreation = function(event: vscode.FileCreateEvent) {
 	// fileExtension = '*'+file.substr(file.lastIndexOf("."));
 	// vscode.window.showInformationMessage('It happened '+fileExtension);
 	//vscode.window.showInformationMessage(`File detected: ${file}`);
-	console.log('New created file detected: '+file.substr(file.lastIndexOf('/')+1));
+	console.log('New created file detected: '+file.substring(file.lastIndexOf('/')+1));
 
 	const templateCreator = new Creator(file, extContext);
 	templateCreator.createTemplate();
