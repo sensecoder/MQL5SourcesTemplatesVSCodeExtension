@@ -1,3 +1,6 @@
+/**
+ * Template source text segment (base class). AddTextAsResult(..) is released by descendants that add a new "segment" to the received text, which they preliminarily prepare based on the logic of their work. In this case, the transmitted text segment can also be edited.
+ */
 export class Segment {
    private lineIndex: number | undefined;
    protected content: Segment[] | undefined;
@@ -15,8 +18,8 @@ export class Segment {
       return this.lineIndex;
    }
 
-   public addTextAsResult(preText: string): string { // must realize by derived class
-      return preText;
+   public addTextAsResult(preText: {value: string}): boolean { // must realize by derived class
+      return false;
    }
 
    public isNestedContentEndParenthesis(): boolean { // must realize by derived class
@@ -53,7 +56,7 @@ export class Segment {
                lineEnd = '';
             }
             result = result + lineEnd;
-            result = segment.addTextAsResult(result);
+            segment.addTextAsResult({value : result});
          }   
       }); 
 

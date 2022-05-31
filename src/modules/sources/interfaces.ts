@@ -1,4 +1,5 @@
-/* Allows get a value by name.
+/** 
+ * Allows get a value by name.
 */
 export interface INamedValues {
    getByName(name: string): string | undefined;
@@ -6,10 +7,11 @@ export interface INamedValues {
    isErrorState(): boolean | string;
 }
 
-/* Provide access to basic values for action classes
+/**
+ * Provide access to basic values for action classes
 */
 export interface IActionBasis {
-   getVariables(): INamedValues;
+   getVariables(): INamedValues | undefined;
    getValueStack(): string[];
 }
 

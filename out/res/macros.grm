@@ -1,0 +1,5 @@
+ResultText -> MacrosResult | EOI
+MacrosResult -> InstructionResult EOI
+InstructionResult -> Concat | Concat INSTRUCTION 
+Concat -> TextValue | Concat PLUS TextValue
+TextValue -> VARIABLE | TEXT_IN_QUOTES

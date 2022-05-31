@@ -1,6 +1,7 @@
 import { GrammarSymbol } from "./grammarsymbol";
 
-/* Grammar string which describe an elementary rule
+/**
+ * Grammar string which describe an elementary rule
 */
 export class Production {
    private leftSide: GrammarSymbol | undefined;
