@@ -1,12 +1,12 @@
 import { IProductionAction } from "../grammargeneric/interfaces";
 import { ReductionTable } from "../grammargeneric/reductiontable";
-import { INamedValues } from "../sources/interfaces";
+import { INamedValues } from "../template/interfaces";
 import { ActionBasis } from "./actionbasis";
 import { Actions } from "./actions";
 import * as path from 'path';
 import { NoAction } from "./actions/noaction";
 
-const REDUCTION_TABLE_FN = path.join(__dirname,'../res/macros.grm');
+const REDUCTION_TABLE_FN = path.join(__dirname,'../../res/macros.grm');
 
 /**
  * Get access to basic grammar construction and variables
@@ -61,11 +61,12 @@ export class ParserBasicProp {
    }
 
    private fillActionsMap(): boolean {
-      if(!this.reductionTable) {
-         console.error('ParserBasicProp.FillActionsMap(): Warning! Reduction table is invalid. Ipossible fill the actions map.');
+      if (!this.reductionTable) {
+         console.error('ParserBasicProp.fillActionsMap(): Warning! Reduction table is invalid. Ipossible fill the actions map.');
          return false;
       }
       let size = this.reductionTable.getSize();
+      console.log(`ParserBasicProp.fillActionsMap(): reductionTable size = ${size}`);
       this.makeActionsMap();
       for (let i = 0; i < size; i++) {
          let prod = this.reductionTable.getLevel(i);
@@ -73,12 +74,12 @@ export class ParserBasicProp {
             return false;
          }
          let pattern = prod.getRightSideNamesPattern();
-         if(pattern === '') {
-            console.error('ParserBasicProp.FillActionsMap(): Error! Pattern is empty!');
+         if (pattern === '') {
+            console.error('ParserBasicProp.fillActionsMap(): Error! Pattern is empty!');
             return false;
          } 
          let action = this.actions.getActionByPattern(pattern);
-         if(!action) {
+         if (!action) {
             action = new NoAction();
             this.actions.insert(action);
          } else {
@@ -101,7 +102,7 @@ export class ParserBasicProp {
 
    private makeReductionTable(): boolean {
       this.reductionTable = new ReductionTable();
-      if(!this.reductionTable.completeFromFile(REDUCTION_TABLE_FN)) {
+      if (!this.reductionTable.completeFromFile(REDUCTION_TABLE_FN)) {
          console.error('ParserBasicProp.makeReductionTable(): Error with filling reduction table from file!');
          return false;
       }

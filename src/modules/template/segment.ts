@@ -38,8 +38,20 @@ export class Segment {
       this.content = arrToSet;
       return true;
    }
-   
-   protected getTextFromContent(): string | null {
+
+   public addContent(segmentToAdd: Segment): boolean {
+      if(!this.content) {
+         this.content = [];
+      }
+      if (segmentToAdd.isNestedContentEndParenthesis()) {
+         return this.packNestedContent(segmentToAdd.getName());
+      }
+      this.content.push(segmentToAdd);
+
+      return true;
+   }
+
+   public getTextFromContent(): string | null {
       let result = '';
       if(!this.content){
          console.error('Segment.getTextFromContent(): Warning! Content is not exist.');
@@ -63,17 +75,6 @@ export class Segment {
       return result;
    }
 
-   protected addContent(segmentToAdd: Segment): boolean {
-      if(!this.content) {
-         this.content = [];
-      }
-      if (segmentToAdd.isNestedContentEndParenthesis()) {
-         return this.packNestedContent(segmentToAdd.getName());
-      }
-      this.content.push(segmentToAdd);
-
-      return true;
-   }
 
    private packNestedContent(name: string): boolean {
       if (name === '') {

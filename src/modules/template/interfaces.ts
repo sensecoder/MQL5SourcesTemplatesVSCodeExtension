@@ -2,7 +2,7 @@
  * Allows get a value by name.
 */
 export interface INamedValues {
-   getByName(name: string): string | undefined;
+   getByName(name: string): any | undefined;
    // 'false' if no error, else return a string with error description (...trash)
    isErrorState(): boolean | string;
 }

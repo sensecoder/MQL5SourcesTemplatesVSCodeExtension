@@ -43,6 +43,14 @@ footer {
    background-color: rgb(146, 48, 48);
 }
 
+.saveButton {
+   background-color: rgb(44, 122, 44);
+}
+
+.saveButton:hover {
+   background-color: rgb(44, 92, 44);
+}
+
 label {
    padding-left: 3px;
 }

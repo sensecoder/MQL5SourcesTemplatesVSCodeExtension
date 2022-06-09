@@ -1,4 +1,4 @@
-import { IActionBasis, INamedValues } from "../sources/interfaces";
+import { IActionBasis, INamedValues } from "../template/interfaces";
 
 export class ActionBasis implements IActionBasis {
    private variables: INamedValues | undefined;

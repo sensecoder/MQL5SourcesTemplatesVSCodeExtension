@@ -1,5 +1,5 @@
 import { IProductionAction } from "../grammargeneric/interfaces";
-import { IActionBasis, INamedValues } from "../sources/interfaces";
+import { IActionBasis, INamedValues } from "../template/interfaces";
 
 /**
  * Base class for actions during level reduction in ReductionTable

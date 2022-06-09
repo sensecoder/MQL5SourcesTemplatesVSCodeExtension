@@ -4,8 +4,25 @@ templateSettings = {};
 data = {};
 
 function btnAcceptClick() {   
-   //let data = {};
-   let elements = document.getElementsByClassName('Data');
+   let result = fixData();
+
+   vscode.postMessage({
+      command: 'accept',
+      text: 'Settings accepted!',
+      settings: result
+   });
+}
+
+function fixData(idName) {
+   let elements;
+   let result = {};
+   if (idName) {
+      let element = document.getElementById(idName);
+      elements = element.getElementsByClassName('Data');
+   } else {
+      result = data;
+      elements = document.getElementsByClassName('Data');
+   }
    
    for (i = 0; i < elements.length; i++) {
       let typeName = elements[i].nodeName;
@@ -17,61 +34,28 @@ function btnAcceptClick() {
                   //       data[elements[i].id] = elements[i].value;
                   //    break;
                   case 'checkbox':
-                        data[elements[i].id] = elements[i].checked;
+                        result[elements[i].id] = elements[i].checked;
                      break;
                
                   default:
-                        data[elements[i].id] = elements[i].value;
+                        result[elements[i].id] = elements[i].value;
                      break;
                }
             break;
-
-         // case 'TEXTAREA':
-         //       data[elements[i].id] = elements[i].value;
-         //    break;
-               
+              
          case 'OPTION':
                if (elements[i].selected) {
-                  data[elements[i].id] = elements[i].value;
+                  result[elements[i].id] = elements[i].value;
                }
             break;
 
          default:
-               data[elements[i].id] = elements[i].value;
+               result[elements[i].id] = elements[i].value;
             break;
       }
    }
 
-      // let inputType = '';
-      // let id = elements[i].id;
-      // if (typeName === 'INPUT') {
-      //    inputType = elements[i].type;
-      // }
-      // if (typeName === 'OPTION') {
-      //    if (elements[i].selected) {
-      //       inputType = elements[i].value;
-      //    }
-      // }
-      // toTest(typeName + ' ' + inputType + ' ' + id);
-   
-   // // Need prototype filename
-   // JSON.stringify(templateSettings, (key, value) => {
-   //    if(value !== '{}') {
-   //       if (key === 'PrototypeFileName') {
-   //          data[key] = value;
-   //       }
-   //    }
-   //    return value;
-   // });
-
-   // let testStr = JSON.stringify(data);
-   // toTest(testStr);
-
-   vscode.postMessage({
-      command: 'accept',
-      text: 'Settings accepted!',
-      settings: data
-   });
+   return result;
 }
 
 /**
@@ -122,11 +106,12 @@ function showFileName(name) {
  * Display block with general template settings
  */
 function showGeneral() {
-   if(templateSettings.General){
+   if (templateSettings.General){
       const canvas = document.getElementsByClassName('canvas');
       // var focused = false;
       var generalArea = document.createElement('div');
       generalArea.innerText = 'General settings:';
+      generalArea.id = 'general';
       var table = document.createElement('table');
       table.setAttribute('class','general');
       generalArea.appendChild(table);
@@ -149,6 +134,9 @@ function showGeneral() {
             inputValue.className = 'Data';
             inputValue.type = 'text';
             inputValue.value = element.toString();
+            inputValue.addEventListener('input',() => {
+               onGeneralEdited();
+            });
             // if (!focused) {
             //    inputValue.focus();
             //    focused = true;
@@ -160,7 +148,39 @@ function showGeneral() {
             table.appendChild(tr);
          }
       }
+      var tr = document.createElement('tr');
+      var tdButtonRow = document.createElement('td',);
+      var div = document.createElement('div');
+      div.className = 'btnDiv';
+      var saveGeneralButton = document.createElement('button');
+      saveGeneralButton.className = 'saveButton';
+      saveGeneralButton.id = 'saveGeneralButton';
+      saveGeneralButton.innerText = 'Save General';
+      saveGeneralButton.hidden = true;
+      saveGeneralButton.addEventListener('click', () => {
+         onSaveGeneralButtonClick();
+      });
+      div.appendChild(saveGeneralButton);
+      // tdButtonRow.appendChild(div);
+      // tr.appendChild(tdButtonRow);
+      generalArea.appendChild(div);
    }
+}
+
+function onSaveGeneralButtonClick() {
+   let result = fixData('general');
+   vscode.postMessage({
+      command: 'saveGeneral',
+      text: 'Need to save general settings!',
+      settings: result
+   });
+   const btn = document.getElementById('saveGeneralButton');
+   btn.hidden = true;
+}
+
+function onGeneralEdited() {
+   const btn = document.getElementById('saveGeneralButton');
+   btn.hidden = false;
 }
 
 /**

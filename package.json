@@ -17,8 +17,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "mql5sourcestemplate.helloWorld",
-				"title": "Hello World"
+				"command": "mql5SourcesTemplate.noCommand",
+				"title": "MQLST NO"
 			}
 		]
 	},

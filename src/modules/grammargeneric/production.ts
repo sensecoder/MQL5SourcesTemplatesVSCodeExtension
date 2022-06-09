@@ -45,9 +45,10 @@ export class Production {
 
    public getRightSideNamesPattern(): string {
       let pattern = '';
-      if(this.rightSide){
+      if (this.rightSide) {
          let sizeRS = this.rightSide.length;
-         for(let j=0; j<sizeRS ;j++) {
+         console.log(`Production.getRightSideNamesPattern(): rightSide.length = ${sizeRS}, rightSide = ${JSON.stringify(this.rightSide)}`);
+         for(let j = 0; j < sizeRS; j++) {
             let space = (j < sizeRS-1) ? " " : "";  
             let symb = this.getRightSide(j);
             if(symb === null) {

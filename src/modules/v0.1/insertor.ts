@@ -40,11 +40,11 @@ export class Insertor {
       // Имя файла шаблона должно находится в settings...
       let fileName = this.settings.get('PrototypeFileName');
       if(!fileName){
-         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': File name of template prototype not found!');
+         console.error(__filename.substring(__filename.lastIndexOf('\\')+1)+': File name of template prototype not found!');
          return '';
       }
       // Надо сделать полное имя:
-      fileName = path.join(__dirname,'../res/'+fileName);
+      fileName = path.join(__dirname,'../../res/'+fileName);
 
       return fileName;
    }
@@ -80,7 +80,7 @@ export class Insertor {
       // });
 
       if (documents.length === 0) {
-         console.error('No one open documents here!');
+         console.error('Insertor.findEditor(): No one open documents here!');
       } else {
          // console.log('this file = ' + this.file);
          for (let i = 0; i < documents.length; i++) {
@@ -88,25 +88,28 @@ export class Insertor {
             // console.log('editor[' + i + '] = ' + editor.document.fileName);
             if (documents[i].fileName === this.file) {               
                vscode.window.showTextDocument(documents[i],vscode.ViewColumn.One);
+               console.log('Insertor.findEditor(): I will show you document!');
                // return vscode.window.activeTextEditor;
             }
          }
       }
 
       if (editors.length === 0) {
-         console.error('No one visible editors here!');
+         console.error('Insertor.findEditor(): No one visible editors here!');
       } else {
          // console.log('this file = ' + this.file);
          for (let i = 0; i < editors.length; i++) {
             editor = editors[i];
             // console.log('editor[' + i + '] = ' + editor.document.fileName);
             if (editor.document.fileName === this.file) {
+               vscode.window.showTextDocument(editor.document);
+               // editor.show();
                return editor;
             }
          }
       }
 
-      console.error('Editor not found!');
+      console.error('Insertor.findEditor(): Editor not found!');
    }
 
    /**
@@ -126,7 +129,7 @@ export class Insertor {
          map.set(key, value);
          return value;
       });
-
+      console.log(`Insertor.mapGenerator(..): map.size = ${map.size}`);
       return map;
    }
 }

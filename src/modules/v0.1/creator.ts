@@ -13,7 +13,7 @@ export class Creator {
    private file: string = '';
    private extContext: vscode.ExtensionContext;
    // местонахождение файла с настройкаи относительно этого файла:
-   private templateSettingsJson: string = path.join(__dirname,'../res/template_settings.json');
+   private templateSettingsJson: string = path.join(__dirname,'../../res/template_settings.json');
 
    /**
     * Создаёт шаблоны для валидного файла

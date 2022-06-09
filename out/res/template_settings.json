@@ -1,6 +1,6 @@
 {
    "General": {
-      "Copyright": "Copyright 2021, Anton Staroverkin",
+      "Copyright": "Copyright 2022, Anton Staroverkin",
       "Link": "https://www.mql5.com/ru/users/sensecoder"
    },
    "FileExtension": {
@@ -11,7 +11,7 @@
                   "UserPresentation": {
                      "hide": true
                   },
-                  "PrototypeFileName":"mql5_expert.tmp"
+                  "PrototypeFileName": "mql5_expert.tmp"
                },
                "Description": {
                   "UserPresentation": {
@@ -123,11 +123,11 @@
       "mqh": {
          "Templates": {
             "Class": {
-               "PrototypeFileName": {
+               "Prototype": {
                   "UserPresentation": {
                      "hide": true
                   },
-                  "PrototypeFileName":"mql5_class.tmp"
+                  "PrototypeFileName": "mql5_class.tmp"
                },
                "Description": {
                   "UserPresentation": {
@@ -144,8 +144,8 @@
                   },
                   "IncludeDescription": false,
                   "Description": "None $FileName Description"
-               },               
-               "ClassName":"$FileName",
+               },
+               "ClassName": "$FileName",
                "ExtendClass": {
                   "UserPresentation": {
                      "checkBoxField": {
@@ -153,8 +153,8 @@
                         "caption": "Parent class extend:",
                         "content": [
                            {
-                              "container":"valueEdit",
-                              "value":"RootClassName"
+                              "container": "valueEdit",
+                              "value": "RootClassName"
                            },
                            {
                               "container": "select",
@@ -167,10 +167,12 @@
                   },
                   "Extend": false,
                   "ExtendModifier": [
-                     "public", "protected", "private"
+                     "public",
+                     "protected",
+                     "private"
                   ],
                   "Modifier": "public",
-                  "RootClassName":"RootClassName"
+                  "RootClassName": "RootClassName"
                }
             }
          }

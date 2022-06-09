@@ -53,12 +53,21 @@ export class LexicalAnalyzer {
          let symb = this.text.charAt(i);
          this.handleState(this.detectMessage(symb), symb);
       }
-      if(this.automatState === AutomatStates.Error) {
+      this.automatState = this.wtfState();
+      if (this.automatState === AutomatStates.Error) { // in this line compiler detect an error if not to do a wtfState()
          this.symbolsQueue = [];
          return false;
       }
 
       return true;
+   }
+
+   /**
+    * Only to prevent a silly compiler error in doAnalysis()
+    * @returns 
+    */
+   private wtfState(): AutomatStates | undefined {
+      return this.automatState;
    }
 
    private isInstruction() {

@@ -26,7 +26,7 @@ export class ReductionTable {
          return null;
       }
       if(indx < 0 || indx >= this.levels.length) {
-         console.error('ReductionTable.getLevel(): Warning! "indx" is not correct. (indx = ${indx})');
+         console.error(`ReductionTable.getLevel(): Warning! "indx" is not correct. (indx = ${indx})`);
          return null;
       }
       return this.levels[indx];
@@ -37,14 +37,15 @@ export class ReductionTable {
       try {
          fileStr = readFileSync(fileName, 'utf8');
       } catch (error) {
-         console.error('ReductionTable.completeFromFile(): File read error occur! fileName = ${fileName}');
+         console.error(`ReductionTable.completeFromFile(): File read error occur! fileName = ${fileName}`);
       }
       if (fileStr === '') {
-         console.error('ReductionTable.completeFromFile(): File not readable. fileName = ${fileName}');
+         console.error(`ReductionTable.completeFromFile(): File not readable. fileName = ${fileName}`);
          return false;
       }
-      let prodStrArr = fileStr.split('/r/n');
+      let prodStrArr = fileStr.split('\n');
       prodStrArr.forEach(prodStr => {
+         // console.log(`ReductionTable.completeFromFile(): ProdStr = ${prodStr}`); 
          this.addStrAsLevel(prodStr);
       });
 
@@ -53,17 +54,20 @@ export class ReductionTable {
 
    private addStrAsLevel(productionStr: string) {
       if (productionStr === '') {
+         console.error(`ReductionTable.addStrAsLevel(..): Error! productionString is empty!`);
          return;
       }
       let separator = '->';
       let orSign = '|';
       let separatorIndx = productionStr.indexOf(separator);
       if(separatorIndx < 0) {
-         console.error('ReductionTable.addStrAsLevel(): Error! Input string is not a grammar production! ("${productionStr}")');
+         console.error(`ReductionTable.addStrAsLevel(): Error! Input string is not a grammar production! ("${productionStr}")`);
          return;
       }
       let leftSide = productionStr.substring(0,separatorIndx).trim();
-      let rightSide = productionStr.substring(separatorIndx+separator.length).trim();
+      // console.log(`ReductionTable.addStrAsLevel(): leftSide = ${leftSide}`);
+      let rightSide = productionStr.substring(separatorIndx + separator.length).trim();
+      // console.log(`ReductionTable.addStrAsLevel(): rightSide = ${rightSide}`);
       let prod: Production;
       let symb: GrammarSymbol;
       if(leftSide === '') {

@@ -14,10 +14,12 @@ export class MacrosParser extends LRParser {
    private variables: INamedValues | undefined;
    private basicProp: ParserBasicProp | undefined;
 
-   constructor(initProp: ParserBasicProp) {
+   constructor(initProp: ParserBasicProp | undefined = undefined) {
       super();
-      this.setBasicProp(initProp);
-      this.valueStack = [];
+      if (initProp) {
+         this.setBasicProp(initProp);
+         this.valueStack = [];
+      }
    }
    
    public getParenthesis(op: {value: string}, cp: {value: string}) {

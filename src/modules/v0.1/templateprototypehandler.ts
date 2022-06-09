@@ -522,7 +522,7 @@ export class TemplatePrototypeHandler {
       try {
          this.protoText = readFileSync(this.protoFile, 'utf8');
       } catch (error) {
-         console.error(__filename.substr(__filename.lastIndexOf('\\')+1)+': Template prototype file read error occur! fileName = '+this.protoFile);
+         console.error(__filename.substring(__filename.lastIndexOf('\\')+1)+': Template prototype file read error occur! fileName = '+this.protoFile);
       }
    }
 

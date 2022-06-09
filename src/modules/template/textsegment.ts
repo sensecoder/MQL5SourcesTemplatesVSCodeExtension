@@ -12,8 +12,8 @@ export class TextSegment extends Segment {
       return false;
    }
 
-   public addTextAsResult(preText: string): string {
-      preText += this.originalText;
-      return preText;
+   public addTextAsResult(preText: {value: string}): boolean {
+      preText.value += this.originalText;
+      return true;
    }
 }
