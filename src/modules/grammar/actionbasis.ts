@@ -2,13 +2,13 @@ import { IActionBasis, INamedValues } from "../template/interfaces";
 
 export class ActionBasis implements IActionBasis {
    private variables: INamedValues | undefined;
-   private valueStack: string[] = [];
+   private valueStack: Array<{value : string}> | undefined;
 
    public getVariables(): INamedValues | undefined {
       return this.variables;
    }
 
-   public getValueStack(): string[] {
+   public getValueStack(): Array<{value : string}> | undefined {
       return this.valueStack;
    }
 
@@ -20,7 +20,7 @@ export class ActionBasis implements IActionBasis {
       return true;
    }
 
-   public setValueStack(initValueStack: string[]): boolean {
+   public setValueStack(initValueStack: Array<{value : string}>): boolean {
       if (!initValueStack) {
          return false;
       }

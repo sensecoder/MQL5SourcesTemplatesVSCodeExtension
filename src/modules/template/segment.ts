@@ -53,22 +53,29 @@ export class Segment {
 
    public getTextFromContent(): string | null {
       let result = '';
-      if(!this.content){
+      if (!this.content){
          console.error('Segment.getTextFromContent(): Warning! Content is not exist.');
          return null;
       }
       let lineIndx = 0;
+      if (this.content[0]) {
+         if (this.content[0].getLineIndex() !== undefined) {
+            lineIndx = <number>this.content[0].getLineIndex();
+         }
+      }
       let lineEnd = '';
       this.content.forEach(segment => {
-         if(segment) {
+         if (segment) {
             if(lineIndx !== segment.getLineIndex()) {
-               lineEnd = '\r\n';
+               lineEnd = '\n';
                lineIndx = <number>segment.getLineIndex();
             } else {
                lineEnd = '';
             }
             result = result + lineEnd;
-            segment.addTextAsResult({value : result});
+            let rres = {value : result};
+            segment.addTextAsResult(rres);
+            result = rres.value;
          }   
       }); 
 
@@ -77,27 +84,34 @@ export class Segment {
 
 
    private packNestedContent(name: string): boolean {
+      // console.log(`Segment.packNestedContent(..): Start packing nested content with name: "${name}"`);
       if (name === '') {
          return false;
       }
-      if(!this.content) {
+      if (!this.content) {
+         console.error(`Segment.packNestedContent(..): Impossible pack nested content with name: "${name}"! Content is out!`);
          return false;
       }
       let nestedContent: Segment[] = [];
       for (let index = (this.content.length - 1); index >= 0; index--) {
          const segment = this.content[index];
-         if(segment) {
+         if (segment) {
             if (segment.getName() === name) {
-               if(segment.setContent(nestedContent)) {
+               // console.log(`Segment.packNestedContent(..): Found segment with name: "${name}", move content with len = ${nestedContent.length} at him as nested content...`);
+               if (segment.setContent(nestedContent)) {
                   this.content.splice(index + 1);
+                  // console.log(`Segment.packNestedContent(..): Moving OK!`);
                   return true;
+               } else {
+                  console.error(`Segment.packNestedContent(..): Moving ERROR!`);
+                  return false;
                }
             }
             nestedContent.unshift(segment);
          }
       }
 
-      console.error('Segment.packNestedContent(): Warning! Unable to pack nested content whith "name" = "${name}"');
+      console.error(`Segment.packNestedContent(): Warning! Unable to pack nested content whith "name" = "${name}"`);
       return false;
    }
 }

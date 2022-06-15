@@ -34,7 +34,7 @@ export class TemplateParser {
    }
    
    public startMachine(): boolean {
-      if(this.state === ParserState.NotReady) {
+      if (this.state === ParserState.NotReady) {
          console.error('TemplateParser.startMachine(): Warning! Parser Not Ready! Set correct macros parenthesis.');
          return false;
       }
@@ -128,6 +128,7 @@ export class TemplateParser {
       }
       let parser = new MacrosParser(this.macrosParserBasic);
       let segment = new MacrosSegment(this.currentText, parser);
+      // console.log(`TemplateParser.addMacrosSegmentInBuffer(): Macros segment with text: "${this.currentText}" ready to add in buffer!`);
       this.buffer.push(segment);
       this.currentText = '';
    }
@@ -196,7 +197,11 @@ export class TemplateParser {
 
    private setMacrosParenthesis(): boolean {
       let parser = new MacrosParser(); 
-      parser.getParenthesis({value : this.openParenthesis}, {value : this.closeParenthesis});
+      let op = {value : ''};
+      let cp = {value : ''};
+      parser.getParenthesis(op, cp);
+      this.openParenthesis = op.value;
+      this.closeParenthesis = cp.value;
       if ((this.openParenthesis === '') || (this.closeParenthesis === '')) {
          console.error('TemplateParser.SetMacrosParenthesis(): Error! Not to set parenthesis of macros block. Parser NOT READY!');
          this.state = ParserState.NotReady;

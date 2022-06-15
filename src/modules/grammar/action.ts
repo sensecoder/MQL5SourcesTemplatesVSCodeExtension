@@ -6,7 +6,7 @@ import { IActionBasis, INamedValues } from "../template/interfaces";
 */
 export class Action implements IProductionAction {
    protected noActionFlag:       boolean = false;
-   protected valueStack:         string[] = [];
+   protected valueStack:         Array<{value : string}> | undefined;
    protected variables:          INamedValues | undefined;
    protected basis:              IActionBasis | undefined;
    protected productionSequence: string = '';
@@ -16,6 +16,9 @@ export class Action implements IProductionAction {
    }
 
    public doAction(actionLexeme: string): boolean { // child will implement
+      // if (this.noActionFlag) {
+      //    console.log('Action.doAction(..): NO ACTION!');
+      // }
       return false;
    }
 
@@ -32,17 +35,19 @@ export class Action implements IProductionAction {
    }
 
    public checkIntegrity(): boolean {
-      if(!this.basis) {
+      if (!this.basis) {
          console.error('Action.checkIntegrity(): Error! Basis is invalid!');
          return false;
       }
       this.valueStack = this.basis.getValueStack();
-      if(!this.valueStack) {
+      if (!this.valueStack) {
          console.error('Action.checkIntegrity(): Error! ValueStack is invalid!');
          return false;
+      } else {
+         // console.log('Action.checkIntegrity(): ValueStack is OK!');
       }
       this.variables = this.basis.getVariables();
-      if(!this.variables) {
+      if (!this.variables) {
          console.error('Action.checkIntegrity(): Error! Variables is invalid!');
          return false;
       }

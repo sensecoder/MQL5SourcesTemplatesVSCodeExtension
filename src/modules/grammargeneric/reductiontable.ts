@@ -49,6 +49,22 @@ export class ReductionTable {
          this.addStrAsLevel(prodStr);
       });
 
+      if(this.levels) {
+         // console.log(`ReductionTable.completeFromFile(): Reduction levels size = ${this.levels.length}`);
+         for (let index = 0; index < this.levels.length; index++) {
+            const element = this.levels[index];
+            let rs = '';
+            for (let i = 0; i < element.getRightSideSize(); i++) {
+               rs = rs + element.getRightSide(i)?.getName();
+               if (i !== (element.getRightSideSize() - 1)) {
+                  rs = rs + ' ';
+               }
+            }
+            // console.log(`ReductionTable.completeFromFile(): Level ${index}: ${element.getLeftSide()?.getName()} => ${rs}`);   
+         }
+           
+      }
+
       return true;
    }
 
@@ -67,7 +83,7 @@ export class ReductionTable {
       let leftSide = productionStr.substring(0,separatorIndx).trim();
       // console.log(`ReductionTable.addStrAsLevel(): leftSide = ${leftSide}`);
       let rightSide = productionStr.substring(separatorIndx + separator.length).trim();
-      // console.log(`ReductionTable.addStrAsLevel(): rightSide = ${rightSide}`);
+      //  console.log(`ReductionTable.addStrAsLevel(): rightSide = ${rightSide}`);
       let prod: Production;
       let symb: GrammarSymbol;
       if(leftSide === '') {
@@ -78,15 +94,30 @@ export class ReductionTable {
          let orPos = -1;
          do {
             orPos = rightSide.indexOf(orSign, startPos);
+            // console.log(`ReductionTable.addStrAsLevel: orPos = ${orPos}`);
             prod = new Production();
             symb = new GrammarSymbol(leftSide, '');
             prod.setLeftSide(symb);
-            let rightStr = rightSide.substring(startPos, orPos).trim();
+            let rightStr = '';
+            if (orPos > 0) {
+               rightStr = rightSide.substring(startPos, orPos).trim();
+            } else {
+               rightStr = rightSide.substring(startPos).trim();
+            }
+            // console.log(`ReductionTable.addStrAsLevel: rightStr = ${rightStr}`);
             let beginPos = 0;
             let spacePos = -1;
             do {
                spacePos = rightStr.indexOf(' ', beginPos);
-               let symbStr = rightStr.substring(beginPos, spacePos - beginPos);
+               // console.log(`ReductionTable.addStrAsLevel: spacePos = ${spacePos}`);
+               let symbStr = '';
+               if (spacePos > 0) {
+                  symbStr = rightStr.substring(beginPos, spacePos);
+                  // console.log(`ReductionTable.addStrAsLevel: symbStr = ${symbStr}`);
+               } else {
+                  symbStr = rightStr.substring(beginPos);
+               }
+               // console.log(`ReductionTable.addStrAsLevel: symbStr = ${symbStr}`);
                symb = new GrammarSymbol(symbStr, '');
                prod.addToRightSide(symb);
                beginPos = spacePos + 1;

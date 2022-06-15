@@ -18,21 +18,24 @@ export class MacrosSegment extends Segment {
       if (this.originalText !== '') {
          result = this.getFirstWordFromOriginalTextCut20();
       }
-      if (this.content) {
-         result += "(+)";
-      }
+      // if (this.content) {
+      //    result += "(+)";
+      // }
       if (this.logic) {
-         let name = '';
-         if (this.logic.isBlockEndMacros({value : name})) {
+         // let name = '';
+         if (this.logic.isBlockEndMacros({value : result})) {
+            // console.log(`MacrosSegment.getName(): Here? And BlockEndMakros.len = ${this.logic.getBlockEndMacros().length}`);   
             result = result.substring(this.logic.getBlockEndMacros().length);
          }
+      } else {
+         console.error(`MacrosSegment.getName(): Logic is out!`);
       }
       return result;
    }
 
    public isNestedContentEndParenthesis(): boolean {
-      let name = '';
-      if(this.logic) {
+      let name = this.getFirstWordFromOriginalTextCut20();
+      if (this.logic) {
          return this.logic.isBlockEndMacros({value : name});
       }
       return false;
@@ -43,12 +46,25 @@ export class MacrosSegment extends Segment {
          console.error('MacrosSegment.addTextAsResult(..): Error! Logic of macros translate is invalid! No result text to add.');
          return false;
       }       
-      if(!this.originalText) {
+      if(this.originalText === undefined) {
          console.error('MacrosSegment.addTextAsResult(..): Error! Original text is undefined! No result text to add.');
          return false;
       }
-      this.logic.setMacrosText(this.originalText);  
-      return this.logic.applyMacros(preText);
+      this.logic.setMacrosText(this.originalText); 
+      // console.log(`MacrosSegment.addTextAsResult(..): Let's apply macros!`); 
+      if (this.content) {
+         // Must be a special macros case
+         if (this.logic.isContentIncluded()) {
+            console.log(`MacrosSegment.addTextAsResult(..): Getting text from nested content...`);
+            preText.value = preText.value + this.getTextFromContent();
+         } 
+      } else {
+         if (!this.logic.applyMacros(preText)) {
+            preText.value = preText.value + this.originalText;
+            return false;
+         }
+      }
+      return true;
    }
 
    private getFirstWordFromOriginalTextCut20(): string {

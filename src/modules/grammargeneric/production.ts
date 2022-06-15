@@ -47,13 +47,13 @@ export class Production {
       let pattern = '';
       if (this.rightSide) {
          let sizeRS = this.rightSide.length;
-         console.log(`Production.getRightSideNamesPattern(): rightSide.length = ${sizeRS}, rightSide = ${JSON.stringify(this.rightSide)}`);
+         // console.log(`Production.getRightSideNamesPattern(): rightSide.length = ${sizeRS}, rightSide = ${JSON.stringify(this.rightSide)}`);
          for(let j = 0; j < sizeRS; j++) {
             let space = (j < sizeRS-1) ? " " : "";  
             let symb = this.getRightSide(j);
             if(symb === null) {
                console.error('Production.getRightSideNamesPattern(): Error! Symbol in right side is null!');
-               return "";
+               return '';
             }
             pattern = pattern + symb.getName() + space;
          }

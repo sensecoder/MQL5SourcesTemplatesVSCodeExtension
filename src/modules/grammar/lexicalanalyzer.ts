@@ -35,7 +35,7 @@ export class LexicalAnalyzer {
    }
    
    public getNextSymbol(): GrammarSymbol | null | undefined {
-      if(this.symbolsQueue.length <= 0) {
+      if (this.symbolsQueue.length <= 0) {
          return null;
       }
       return this.symbolsQueue.shift();
@@ -43,10 +43,12 @@ export class LexicalAnalyzer {
    
    public doAnalysis(): boolean {
       let len = this.text.length;
+      // console.log(`LexicalAnalyzer.doAnalysis(): Ready to analyze text with len = ${len}`);
       this.automatState = AutomatStates.ReadyToInput;
       this.automatString = '';
-      for(let i = 0; i <= len; i++) {
-         if(i === len){
+      for (let i = 0; i <= len; i++) {
+         if (i === len){
+            // console.log(`LexicalAnalyzer.doAnalysis(): Reach end of text!`);
             this.handleState(InputMessage.EOI);
             break;
          }
@@ -54,10 +56,11 @@ export class LexicalAnalyzer {
          this.handleState(this.detectMessage(symb), symb);
       }
       this.automatState = this.wtfState();
-      if (this.automatState === AutomatStates.Error) { // in this line compiler detect an error if not to do a wtfState()
+      if (this.automatState === AutomatStates.Error) { // in this line typescript compiler detect an error if not to do a wtfState()
          this.symbolsQueue = [];
          return false;
       }
+      // console.log(`LexicalAnalyzer.doAnalysis(): Analysis DONE with symbolsQueue.len = ${this.symbolsQueue.length}`);
 
       return true;
    }
@@ -71,18 +74,20 @@ export class LexicalAnalyzer {
    }
 
    private isInstruction() {
-      if(this.automatString === 'inMQLHeadStandard') {
+      if (this.automatString === 'inMQLHeadStandard') {
          return true;
       }
-      if(this.automatString === 'inMQLCommentBlockStandard') {
+      if (this.automatString === 'inMQLCommentBlockStandard') {
          return true;
       }
       return false;
    }
 
    private addEOI() {
-      if(this.automatString) {
+      if (this.automatString !== undefined) {
          this.symbolsQueue.push(new GrammarSymbol('EOI',''));
+      } else {
+         console.error('LexicalAnalyzer.addEOI(): automatString Error!');
       }
       this.automatString = '';
    }
@@ -98,15 +103,17 @@ export class LexicalAnalyzer {
    }
 
    private addGrammarSymbol() {
-      if(!this.automatString) {
+      if (!this.automatString) {
          console.error('LexicalAnalyzer.addGrammarSymbol(): Error! "automatString" is undefined!');
          return;
       }
       let token: GrammarSymbol;
-      if(this.isInstruction()) {
+      if (this.isInstruction()) {
          token = new GrammarSymbol('INSTRUCTION',this.automatString);
+         // console.log(`LexicalAnalyzer.addGrammarSymbol(): New token is a INSTRUCTION with lexeme: ${this.automatString}`);
       } else {
          token = new GrammarSymbol('VARIABLE',this.automatString);
+         // console.log(`LexicalAnalyzer.addGrammarSymbol(): New token is a VARIABLE with lexeme: ${this.automatString}`);
       }
       this.symbolsQueue.push(token);
       this.automatString = '';
@@ -114,7 +121,7 @@ export class LexicalAnalyzer {
 
    private addTextInQuotesGrammarSymbol() {
       this.removeSymbol();    // Last should be a doublequotes
-      if(this.automatString) {
+      if (this.automatString) {
          this.symbolsQueue.push(new GrammarSymbol('TEXT_IN_QUOTES',this.automatString));
       } else {
          this.symbolsQueue.push(new GrammarSymbol('TEXT_IN_QUOTES',''));
@@ -173,6 +180,7 @@ export class LexicalAnalyzer {
                      break;
                   case InputMessage.any_other_symbol:
                      this.automatState = AutomatStates.ReadWord;
+                     // console.log(`LexicalAnalyzer.handleState(..): Automat in ReadWord state!`);
                      this.addSymbol(symbol);
                      break;
                   case InputMessage.EOI:
@@ -225,6 +233,7 @@ export class LexicalAnalyzer {
                switch (message) {
                   case InputMessage.space_symbol:
                      this.automatState = AutomatStates.ReadyToInput;
+                     // console.log(`LexicalAnalyzer.handleState(..): Word was readed!`);
                      this.addGrammarSymbol();
                      break;
                   case InputMessage.double_quotes_symbol:

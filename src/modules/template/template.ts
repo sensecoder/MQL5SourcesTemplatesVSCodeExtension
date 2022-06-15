@@ -44,6 +44,7 @@ export class Template {
          return false;
       }
       let len = line.length;
+      // console.log(`Template.processLine(..): len = ${len}`);
       for (let i = 0; i < len; i++) {
          parser.readChar(line.charAt(i));
       }
@@ -51,11 +52,14 @@ export class Template {
       if (len === 0) {
          segment = new TextSegment('');
       }
+      let n = 0;
       while(segment) {
          segment.setLineIndex(indx);
          this.mainSegment.addContent(segment);
          segment = parser.pullBufferSegment();
+         n++;
       }
+      // console.log(`'Template.processLine(..): Added ${n} segments (almost)!`);
       return true;
    }
 
@@ -67,8 +71,8 @@ export class Template {
       }
       for (let i = 0; i < linesCount; i++) {
          let line = this.getLine(i);
-         if (!line) {
-            console.error('Template.processTemplate(): Warning! line["+i+"] out of pointer!');
+         if (line === null) {
+            console.error('Template.processTemplate(): Warning! line[' + i + '] out of pointer!');
          } else {
             if (!this.processLine(i, line)) {
                return false;
@@ -104,7 +108,8 @@ export class Template {
       if(!this.template){
          return false;
       }
-      this.lines = this.template.split('/r/n');
+      this.lines = this.template.split('\n');
+      // console.log(`Template.separateByLine(): lines.lenth = ${this.lines.length}`);
       
       return true;
    }

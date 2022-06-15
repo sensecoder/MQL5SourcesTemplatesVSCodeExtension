@@ -12,7 +12,7 @@ export class Plus extends Action {
    }
    
    public doAction(actionLexeme: string): boolean {
-      if (!this.checkIntegrity) {
+      if (!this.checkIntegrity()) {
          return false;
       }
       if (!this.valueStack) {
@@ -24,7 +24,8 @@ export class Plus extends Action {
          console.error('Plus.doAction(): Error! Something goes wrong!');
          return false;
       }
-      this.valueStack.push(val1 + val2);
+      let sum = {value : val1.value + val2.value};
+      this.valueStack.push(sum);
       return true;
    }
 

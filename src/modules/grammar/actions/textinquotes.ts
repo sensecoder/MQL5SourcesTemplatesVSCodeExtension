@@ -12,13 +12,13 @@ export class TextInQuotes extends Action {
    }
    
    public doAction(actionLexeme: string): boolean {
-      if (!this.checkIntegrity) {
+      if (!this.checkIntegrity()) {
          return false;
       }
       if (!this.valueStack) {
          return false;
       }
-      this.valueStack.push(actionLexeme);
+      this.valueStack.push({value : actionLexeme});
       return true;
    }
 

@@ -7,6 +7,10 @@ import { Variable } from "./actions/variable";
 export class Actions {
    private array: Action[] = [];
    
+   constructor() {
+      this.initializeArray();
+   }
+   
    public isClear(): boolean {
       if (this.array.length <= 0) {
          return true;
@@ -16,10 +20,12 @@ export class Actions {
 
    public getActionByPattern(pattern: string): Action | null {
       let size = this.array.length;
+      // console.log(`Actions.getActionByPattern(..): Try get action class with pattern = ${pattern}`);
       for (let index = 0; index < size; index++) {
          const element = this.array[index];
          if (element) {
             if (pattern === element.getProductionSequence()) {
+               // console.log(`Actions.getActionByPattern(..): Found action class with pattern = ${pattern}`);
                return element;
             }
          } else {

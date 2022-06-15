@@ -43,7 +43,7 @@ export class ParserBasicProp {
       return this.reductionTable;
    }
 
-   public setValueStackForActions(initStack: string[]): boolean {
+   public setValueStackForActions(initStack: Array<{value : string}>): boolean {
       if(!this.actionBasis) {
          console.error('ParserBasicProp.setValueStackForActions(..): Error! ActionBasis is invalid!');
          return false;
@@ -66,7 +66,7 @@ export class ParserBasicProp {
          return false;
       }
       let size = this.reductionTable.getSize();
-      console.log(`ParserBasicProp.fillActionsMap(): reductionTable size = ${size}`);
+      // console.log(`ParserBasicProp.fillActionsMap(): reductionTable size = ${size}`);
       this.makeActionsMap();
       for (let i = 0; i < size; i++) {
          let prod = this.reductionTable.getLevel(i);
@@ -80,15 +80,18 @@ export class ParserBasicProp {
          } 
          let action = this.actions.getActionByPattern(pattern);
          if (!action) {
+            // console.log('ParserBasicProp.fillActionsMap(): NO Action detected!');
             action = new NoAction();
             this.actions.insert(action);
          } else {
+            // console.log('ParserBasicProp.fillActionsMap(): Action detected!');
             action.setBasis(this.actionBasis);
          }
          let key = pattern;
          if (!this.actionsMap) {
             return false;
          }
+         // console.log('ParserBasicProp.fillActionsMap(): Add action to map!');
          this.actionsMap.set(key, action);
          this.addMapKey(key);
       }

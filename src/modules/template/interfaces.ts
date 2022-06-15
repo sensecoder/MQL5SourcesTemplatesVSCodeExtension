@@ -12,6 +12,6 @@ export interface INamedValues {
 */
 export interface IActionBasis {
    getVariables(): INamedValues | undefined;
-   getValueStack(): string[];
+   getValueStack(): Array<{value : string}> | undefined;
 }
 

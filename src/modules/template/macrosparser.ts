@@ -18,7 +18,7 @@ export class MacrosParser extends LRParser {
       super();
       if (initProp) {
          this.setBasicProp(initProp);
-         this.valueStack = [];
+         this.valueStack = new Array<{value: string}>();
       }
    }
    
@@ -29,6 +29,7 @@ export class MacrosParser extends LRParser {
 
    public setMacrosText(textToSet: string) {
       this.lexicalAnalyzer = new LexicalAnalyzer(textToSet);
+      // console.log(`MacrosParser.setMacrosText(..): New lexicalAnalyzer recieved text: "${textToSet}"`);
       this.lexicalAnalyzer.doAnalysis();
    }
 
@@ -85,20 +86,21 @@ export class MacrosParser extends LRParser {
          console.error('MacrosParser.applyMacros(..): Warning! Error with no valueStack.');
          return false;
       }
-      this.valueStack.push(preText.value); // on bottom of stack
+      this.valueStack.push(preText); // on bottom of stack
       this.basicProp.setValueStackForActions(this.valueStack);
       this.parseLexic();
       if (this.valueStack.length === 2) {
          let value = this.valueStack.pop();
-         if (!value) {
+         if (value !== undefined) {
             let exist = preText.value;
-            preText.value = exist + value;
+            preText.value = exist + value.value;
             this.valueStack = [];
          } else {
             console.error('MacrosParser.applyMacros(..): Warning! Value in value stack is invalid!');
          }
       } else {
          console.error('MacrosParser.applyMacros(..):  Warning! Abnormal length of valueStack! length = ' + this.valueStack.length);
+         return false;
       }
    
       return true;
@@ -108,12 +110,41 @@ export class MacrosParser extends LRParser {
       return BLOCK_END_MACROS;
    }
 
-   // NOT IMPLEMENTED (yet):
    public isBlockEndMacros(name: {value: string}): boolean {
+      if (name.value.substring(0, (BLOCK_END_MACROS.length)) === BLOCK_END_MACROS) {
+         return true;
+      }
       return false;
    }
 
    public isContentIncluded(): boolean {
+      if (!this.lexicalAnalyzer) {
+         console.error('MacrosParser.isContentIncluded(): Warning! Error with no macros lexic.');
+         return false;
+      }
+      if (!this.variables) {
+         console.error('MacrosParser.isContentIncluded(): Warning! Error with no variables.');
+         return false;
+      }
+      let isIfSymbol = this.lexicalAnalyzer.getNextSymbol();
+      if (isIfSymbol) {
+         if (isIfSymbol.getLexeme() === 'if') {
+            // console.log(`MacrosParser.isContentIncluded(): "if" symbol detected - it is OK!`);
+            let boolValueSymbol = this.lexicalAnalyzer.getNextSymbol();
+            if (boolValueSymbol) {
+               let boolValue = this.variables.getByName(boolValueSymbol.getLexeme());
+               // console.log(`MacrosParser.isContentIncluded(): boolValue is: ${typeof boolValue}`);
+               // eslint-disable-next-line eqeqeq
+               if (typeof boolValue === 'boolean') {
+                  // console.log(`MacrosParser.isContentIncluded(): return this!`);
+                  return boolValue;
+               }
+            }
+         } else {
+            console.error(`MacrosParser.isContentIncluded(): "if" symbol not detected! its a worse case!  name is: ${isIfSymbol.getLexeme()}`);
+         }
+      }
+
       return false;
    };
 }
