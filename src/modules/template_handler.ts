@@ -26,7 +26,7 @@ export class TemplateHandler {
 
    private getPrototypeFileName(): string {
       let result = '';
-      let nameFromSettings = this.settigs.getByName('PrototypeFileName');
+      let nameFromSettings = this.settigs.getByName('TemplateFileName');
       if (!nameFromSettings) {
          console.error('TemplateHandler.getPrototypeFileName(): File name of template prototype not found!');
       } else {

@@ -36,6 +36,9 @@ function fixData(idName) {
                   case 'checkbox':
                         result[elements[i].id] = elements[i].checked;
                      break;
+                  case 'radio':
+                        result[elements[i].id] = elements[i].checked;
+                     break;
                
                   default:
                         result[elements[i].id] = elements[i].value;
@@ -378,6 +381,9 @@ function makePresentationElement(element) {
             case 'checkBoxField':
                   return makeCheckBoxField(element,dataElem);
                break;
+            case 'radioButtonsField':
+                  return makeRadiobuttonsField(element,dataElem);
+               break;
             default:
                   text = text + keyStr;
                break;
@@ -406,14 +412,51 @@ function toTest(text) {
 function getValue(key,arrKeyVal) {
    let value;
    arrKeyVal.forEach(element => {
-      if(key === element.key.toString()) {
+      if (key === element.key.toString()) {
          value = element.value; // getPrimalValue(key);
       }
    });
    return value;
 }
 
-function makeCheckBoxField(element,params) {
+function makeRadiobuttonsField(element, params) {
+   var tr = document.createElement('tr');
+   var td = document.createElement('td',);
+   td.setAttribute('colspan','3');
+   var divRadioSelect = document.createElement('div');
+   var checkersCaption = document.createElement('p');
+   checkersCaption.innerText = element.caption;
+   divRadioSelect.appendChild(checkersCaption);
+   var divRadiobuttons = document.createElement('div');
+   divRadiobuttons.className = 'radioButtons';
+   if (Object.hasOwnProperty.call(element, 'content')) {
+      element.content.forEach(elem => {
+         var content = null;
+         if (elem.container === 'radio') {
+            var radioInput = document.createElement('input');
+            radioInput.type = 'radio';
+            radioInput.name = element.name;
+            radioInput.className = 'Data';
+            radioInput.id = elem.value;
+            radioInput.checked = data[elem.value];
+            var label = document.createElement('label');
+            label.setAttribute('for',elem.value);
+            label.innerText = elem.label;
+            divRadiobuttons.appendChild(radioInput);
+            divRadiobuttons.appendChild(label);
+            divRadiobuttons.appendChild(document.createElement('br'));
+         }
+      });
+   }
+   divRadioSelect.appendChild(divRadiobuttons);
+   td.appendChild(divRadioSelect);
+   //divValue.innerText = 'value';
+   tr.appendChild(td);
+   
+   return tr;
+}
+
+function makeCheckBoxField(element, params) {
    var tr = document.createElement('tr');
    var td = document.createElement('td',);
    //td.className = 'checkBoxColumn';
@@ -426,6 +469,7 @@ function makeCheckBoxField(element,params) {
    checkBox = document.createElement('input');
    checkBox.type = 'checkbox';
    checkBox.id = element.checker;
+   checkBox.checked = data[element.checker];
    checkBox.className = 'Data';
    checkBox.addEventListener('click',() => {
       onCheckBoxClick(element.checker,element.checker+'Value');

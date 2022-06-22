@@ -1,17 +1,17 @@
 {
    "General": {
-      "Copyright": "Copyright 2022, Anton Staroverkin",
-      "Link": "https://www.mql5.com/ru/users/sensecoder"
+      "Author": "Copyright 20XX, MyName",
+      "Link": "https://www.mysite.com/"
    },
    "FileExtension": {
       "mq5": {
          "Templates": {
             "Expert": {
-               "PrototypeFileName": {
+               "TemplateFileName": {
                   "UserPresentation": {
                      "hide": true
                   },
-                  "PrototypeFileName": "mql5_expert.tmp"
+                  "TemplateFileName": "mql5_expert.tpl"
                },
                "Description": {
                   "UserPresentation": {
@@ -27,7 +27,7 @@
                      }
                   },
                   "IncludeDescription": false,
-                  "Description": "None $FileName Description"
+                  "Description": "$FileName Description"
                },
                "OnTimer": {
                   "UserPresentation": {
@@ -117,17 +117,13 @@
                   },
                   "OnBookEvent": false
                }
-            }
-         }
-      },
-      "mqh": {
-         "Templates": {
-            "Class": {
-               "Prototype": {
+            },
+            "Indicator": {
+               "TemplateFileName": {
                   "UserPresentation": {
                      "hide": true
                   },
-                  "PrototypeFileName": "mql5_class.tmp"
+                  "TemplateFileName": "mql5_indicator.tpl"
                },
                "Description": {
                   "UserPresentation": {
@@ -143,7 +139,215 @@
                      }
                   },
                   "IncludeDescription": false,
-                  "Description": "None $FileName Description"
+                  "Description": "$FileName Description"
+               },
+               "OnCalculate": {
+                  "UserPresentation": {
+                     "radioButtonsField": {
+                        "name": "OnCalculate",
+                        "caption": "Select OnCalculate function:",
+                        "content": [
+                           {
+                              "container": "radio",
+                              "value": "OnCalculate1",
+                              "label": "OnCalculate(...,open,high,low,close)"
+                           },
+                           {
+                              "container": "radio",
+                              "value": "OnCalculate2",
+                              "label": "OnCalculate(..., prices)"
+                           }
+                        ]
+                     }
+                  },
+                  "OnCalculate1": true,
+                  "OnCalculate2": false
+               },
+               "OnTimer": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnTimer",
+                        "caption": "Include OnTimer() function"
+                     }
+                  },
+                  "OnTimer": true,
+                  "TimerSetting": 60
+               },
+               "OnChartEvent": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "OnChartEvent",
+                        "caption": "Include OnChartEvent() function"
+                     }
+                  },
+                  "OnChartEvent": true
+               },
+               "InSeparateWindow": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "InSeparateWindow",
+                        "caption": "Indicator in separate window"
+                     }
+                  },
+                  "InSeparateWindow": false
+               },
+               "Plots": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "Plots",
+                        "caption": "Plot (for example):",
+                        "content": [
+                           {
+                              "container": "valueEdit",
+                              "value": "Label"
+                           },
+                           {
+                              "container": "valueEdit",
+                              "value": "Type"
+                           },
+                           {
+                              "container": "valueEdit",
+                              "value": "Color"
+                           }
+                        ]
+                     }
+                  },
+                  "Plots": false,
+                  "Label": "Label1",
+                  "Type": "DRAW_LINE",
+                  "Color": "clrRed"
+               }
+            },
+            "Script": {
+               "TemplateFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "TemplateFileName": "mql5_script.tpl"
+               },
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description:",
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": "$FileName description"
+               }
+            },
+            "Service": {
+               "TemplateFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "TemplateFileName": "mql5_service.tpl"
+               },
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description:",
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": "$FileName description"
+               }
+            },
+            "Library": {
+               "TemplateFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "TemplateFileName": "mql5_library.tpl"
+               },
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description:",
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": "$FileName description"
+               }
+            }
+         }
+      },
+      "mqh": {
+         "Templates": {
+            "Class": {
+               "TemplateFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "TemplateFileName": "mql5_class.tpl"
+               },
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description",
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": "$FileName description"
+               },
+               "NameSpace": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "NameSpaceEnable",
+                        "caption": "Is included in namespace",
+                        "content": [
+                           {
+                              "container": "valueEdit",
+                              "value": "NameSpace"
+                           }
+                        ]
+                     }
+                  },
+                  "NameSpaceEnable": false,
+                  "NameSpace": "NameSpace"
+               },
+               "Template": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "TemplateEnable",
+                        "caption": "Use type template",
+                        "content": [
+                           {
+                              "container": "valueEdit",
+                              "value": "TemplateTypeName"
+                           }
+                        ]
+                     }
+                  },
+                  "TemplateEnable": false,
+                  "TemplateTypeName": "typename T"
                },
                "ClassName": "$FileName",
                "ExtendClass": {
@@ -161,6 +365,10 @@
                               "caption": "Modifier:",
                               "value": "ExtendModifier",
                               "selectedValue": "Modifier"
+                           },
+                           {
+                              "container": "valueEdit",
+                              "value": "RootClassPath"
                            }
                         ]
                      }
@@ -172,7 +380,82 @@
                      "private"
                   ],
                   "Modifier": "public",
-                  "RootClassName": "RootClassName"
+                  "RootClassName": "RootClassName",
+                  "RootClassPath": "..RootClassPath"
+               }
+            },
+            "Interface": {
+               "TemplateFileName": {
+                  "UserPresentation": {
+                     "hide": true
+                  },
+                  "TemplateFileName": "mql5_interface.tpl"
+               },
+               "Description": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "IncludeDescription",
+                        "caption": "Include description:",
+                        "content": [
+                           {
+                              "container": "textarea",
+                              "value": "Description"
+                           }
+                        ]
+                     }
+                  },
+                  "IncludeDescription": false,
+                  "Description": "$FileName description"
+               },
+               "NameSpace": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "NameSpaceEnable",
+                        "caption": "Is included in namespace:",
+                        "content": [
+                           {
+                              "container": "valueEdit",
+                              "value": "NameSpace"
+                           }
+                        ]
+                     }
+                  },
+                  "NameSpaceEnable": false,
+                  "NameSpace": "NameSpace"
+               },
+               "InterfaceName": "$FileName",
+               "ExtendInterface": {
+                  "UserPresentation": {
+                     "checkBoxField": {
+                        "checker": "Extend",
+                        "caption": "Parent interface extend:",
+                        "content": [
+                           {
+                              "container": "valueEdit",
+                              "value": "RootInterfaceName"
+                           },
+                           {
+                              "container": "select",
+                              "caption": "Modifier:",
+                              "value": "ExtendModifier",
+                              "selectedValue": "Modifier"
+                           },
+                           {
+                              "container": "valueEdit",
+                              "value": "RootInterfacePath"
+                           }
+                        ]
+                     }
+                  },
+                  "Extend": false,
+                  "ExtendModifier": [
+                     "public",
+                     "protected",
+                     "private"
+                  ],
+                  "Modifier": "public",
+                  "RootInterfaceName": "RootInterfaceName",
+                  "RootInterfacePath": "..RootInterfacePath"
                }
             }
          }

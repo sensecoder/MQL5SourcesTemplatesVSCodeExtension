@@ -1,31 +1,43 @@
 //+------------------------------------------------------------------+
 //|                               {{FileNameFull inMQLHeadStandard}} |
-//|                                  {{Copyright inMQLHeadStandard}} |
+//|                                     {{Author inMQLHeadStandard}} |
 //|                                       {{Link inMQLHeadStandard}} |
 //+------------------------------------------------------------------+
-#property copyright "{{Copyright}}"
+#property copyright "{{Author}}"
 #property link      "{{Link}}"
 #property version   "{{Version = 1.00}}"
 
+{{if Extend}}#include "{{RootClassPath}}"
+ {{/if}}
+{{if NameSpaceEnable}}namespace {{NameSpace}} {{{/if}}
 {{if IncludeDescription}}{{Description inMQLCommentBlockStandard}}{{/if}}
+{{if TemplateEnable}}template<{{TemplateTypeName}}>{{/if}}
 class {{ClassName}} {{if Extend}}: {{Modifier}} {{RootClassName}} {{/if}}
 {
-	private:
+   public:
+      {{ClassName}}();
+     ~{{ClassName}}();
 
-	public:
-	   {{ClassName}}();
-	  ~{{ClassName}}();
+   private:
 };
 
 //+------------------------------------------------------------------+
 //| Constructor(s):                                                  |
 //+------------------------------------------------------------------+
-{{ClassName}}::{{ClassName}}() {
+{{if TemplateEnable}}template<{{TemplateTypeName}}>{{/if}}
+{{ClassName}}::{{ClassName}}() 
+{
+
 }
 
 //+------------------------------------------------------------------+
 //| Destructor:                                                      |
 //+------------------------------------------------------------------+
-{{ClassName}}::~{{ClassName}}() {
+{{if TemplateEnable}}template<{{TemplateTypeName}}>{{/if}}
+{{ClassName}}::~{{ClassName}}() 
+{
+
 }
+{{if NameSpaceEnable}} 
+} // end of namespace{{/if}}
 //+------------------------------------------------------------------+

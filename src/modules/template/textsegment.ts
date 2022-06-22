@@ -5,7 +5,7 @@ import { Segment } from "./segment";
 export class TextSegment extends Segment {
    constructor(initOriginalText: string) {
       super();
-      this.originalText = initOriginalText;
+      this.setOriginalText(initOriginalText);
    }
 
    public setContent(arrToSet: Segment[]): boolean {
@@ -15,5 +15,13 @@ export class TextSegment extends Segment {
    public addTextAsResult(preText: {value: string}): boolean {
       preText.value += this.originalText;
       return true;
+   }
+
+   private setOriginalText(initText: string) {
+      if (initText[initText.length - 1] === '\r') {
+         this.originalText = initText.substring(0, initText.length - 1);
+      } else {
+         this.originalText = initText;
+      }
    }
 }

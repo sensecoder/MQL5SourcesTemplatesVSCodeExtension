@@ -1,21 +1,22 @@
 //+------------------------------------------------------------------+
-//|                               <{FileNameFull inMQLHeadStandard}> |
-//|                                  <{Copyright inMQLHeadStandard}> |
-//|                                       <{Link inMQLHeadStandard}> |
+//|                               {{FileNameFull inMQLHeadStandard}} |
+//|                                     {{Author inMQLHeadStandard}} |
+//|                                       {{Link inMQLHeadStandard}} |
 //+------------------------------------------------------------------+
-#property copyright "<{Copyright}>"
-#property link      "<{Link}>"
-#property version   "<{Version = 1.00}>"
+#property copyright "{{Author}}"
+#property link      "{{Link}}"
+#property version   "{{Version = 1.00}}"
 
-<{Optional if IncludeDescription}><{Description inMQLCommentBlockStandard}><{/Optional}>
+{{if IncludeDescription}}{{Description inMQLCommentBlockStandard}}{{/if}}
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
-int OnInit() {
-<{Optional if OnTimer}>
+int OnInit() 
+{
+{{if OnTimer}}
 //--- create timer
-   EventSetTimer(<{TimerSetting = 60}>);
-<{/Optional}>   
+   EventSetTimer({{TimerSetting = 60}});
+{{/if}}   
 //---
    return(INIT_SUCCEEDED);
 }
@@ -23,96 +24,107 @@ int OnInit() {
 //+------------------------------------------------------------------+
 //| Expert deinitialization function                                 |
 //+------------------------------------------------------------------+
-void OnDeinit(const int reason) {
-<{Optional if OnTimer}>
+void OnDeinit(const int reason) 
+{
+{{if OnTimer}}
 //--- destroy timer
    EventKillTimer();
-<{/Optional}>   
+{{/if}}   
 }
 
 //+------------------------------------------------------------------+
 //| Expert tick function                                             |
 //+------------------------------------------------------------------+
-void OnTick() {
+void OnTick() 
+{
    
 }
-<{Optional if OnTimer}>
+{{if OnTimer}}
 //+------------------------------------------------------------------+
 //| Timer function                                                   |
 //+------------------------------------------------------------------+
-void OnTimer() {
+void OnTimer() 
+{
 
 }
-<{/Optional}>
-<{Optional if OnTrade}>
+{{/if}}
+{{if OnTrade}}
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
 //+------------------------------------------------------------------+
-void OnTrade() {
+void OnTrade() 
+{
 
 }
-<{/Optional}>
-<{Optional if OnTradeTransaction}>
+{{/if}}
+{{if OnTradeTransaction}}
 //+------------------------------------------------------------------+
 //| TradeTransaction function                                        |
 //+------------------------------------------------------------------+
 void OnTradeTransaction(const MqlTradeTransaction& trans,
                         const MqlTradeRequest& request,
-                        const MqlTradeResult& result) {
+                        const MqlTradeResult& result) 
+{
 
 }
-<{/Optional}>
-<{Optional if OnTester}>
+{{/if}}
+{{if OnTester}}
 //+------------------------------------------------------------------+
 //| Tester function                                                  |
 //+------------------------------------------------------------------+
-double OnTester() {
+double OnTester() 
+{
    double ret=0.0;
 
    return(ret);
 }
-<{/Optional}>
-<{Optional if OnTesterInit}>
+{{/if}}
+{{if OnTesterInit}}
 //+------------------------------------------------------------------+
 //| TesterInit function                                              |
 //+------------------------------------------------------------------+
-void OnTesterInit() {
+void OnTesterInit() 
+{
    
 }
-<{/Optional}>
-<{Optional if OnTesterPass}>
+{{/if}}
+{{if OnTesterPass}}
 //+------------------------------------------------------------------+
 //| TesterPass function                                              |
 //+------------------------------------------------------------------+
-void OnTesterPass() {
+void OnTesterPass() 
+{
    
 }
-<{/Optional}>
-<{Optional if OnTesterDeinit}>
+{{/if}}
+{{if OnTesterDeinit}}
 //+------------------------------------------------------------------+
 //| TesterDeinit function                                            |
 //+------------------------------------------------------------------+
-void OnTesterDeinit() {
+void OnTesterDeinit() 
+{
    
 }
-<{/Optional}>
-<{Optional if OnChartEvent}>
+{{/if}}
+{{if OnChartEvent}}
 //+------------------------------------------------------------------+
 //| ChartEvent function                                              |
 //+------------------------------------------------------------------+
 void OnChartEvent(const int id,
                   const long &lparam,
                   const double &dparam,
-                  const string &sparam) {
+                  const string &sparam) 
+{
    
 }
-<{/Optional}>
-<{Optional if OnBookEvent}>
+{{/if}}
+{{if OnBookEvent}}
 //+------------------------------------------------------------------+
 //| BookEvent function                                               |
 //+------------------------------------------------------------------+
-void OnBookEvent(const string &symbol) {
+void OnBookEvent(const string &symbol) 
+{
    
 }
-<{/Optional}>
+{{/if}}
 //+------------------------------------------------------------------+

@@ -42,11 +42,11 @@ export class MacrosSegment extends Segment {
    }
    
    public addTextAsResult(preText: {value: string}): boolean {
-      if(!this.logic) {
+      if (!this.logic) {
          console.error('MacrosSegment.addTextAsResult(..): Error! Logic of macros translate is invalid! No result text to add.');
          return false;
       }       
-      if(this.originalText === undefined) {
+      if (this.originalText === undefined) {
          console.error('MacrosSegment.addTextAsResult(..): Error! Original text is undefined! No result text to add.');
          return false;
       }
@@ -55,9 +55,22 @@ export class MacrosSegment extends Segment {
       if (this.content) {
          // Must be a special macros case
          if (this.logic.isContentIncluded()) {
-            console.log(`MacrosSegment.addTextAsResult(..): Getting text from nested content...`);
+            // console.log(`MacrosSegment.addTextAsResult(..): Getting text from nested content...`);
             preText.value = preText.value + this.getTextFromContent();
-         } 
+         } else {
+            // First check on "else" segment in content
+            this.content.forEach((value) => {
+               if (value.getName() === 'else') {
+                  preText.value = preText.value + value.getTextFromContent();
+                  return true;
+               }
+            });
+            // Need to remove the break line symbol from text, if it has it
+            let symb = preText.value.substring(preText.value.length - 2);
+            if (symb === '\r\n') {
+               preText.value = preText.value.substring(0, (preText.value.length - 2));
+            }
+         }
       } else {
          if (!this.logic.applyMacros(preText)) {
             preText.value = preText.value + this.originalText;

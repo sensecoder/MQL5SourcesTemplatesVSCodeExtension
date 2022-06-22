@@ -31,7 +31,7 @@ export class Segment {
    }
 
    public setContent(arrToSet: Segment[]): boolean {
-      if(this.content) {
+      if (this.content) {
          console.error('Segment.setContent(): Warning! Content already exist.');
          return false;
       }
@@ -40,7 +40,7 @@ export class Segment {
    }
 
    public addContent(segmentToAdd: Segment): boolean {
-      if(!this.content) {
+      if (!this.content) {
          this.content = [];
       }
       if (segmentToAdd.isNestedContentEndParenthesis()) {
@@ -66,16 +66,17 @@ export class Segment {
       let lineEnd = '';
       this.content.forEach(segment => {
          if (segment) {
-            if(lineIndx !== segment.getLineIndex()) {
-               lineEnd = '\n';
+            // console.log(`segment.name = ${segment.getName()}`);
+            if (lineIndx !== segment.getLineIndex()) {
+               lineEnd = '\r\n';
                lineIndx = <number>segment.getLineIndex();
             } else {
                lineEnd = '';
             }
             result = result + lineEnd;
-            let rres = {value : result};
-            segment.addTextAsResult(rres);
-            result = rres.value;
+            let resultObj = {value : result};
+            segment.addTextAsResult(resultObj);
+            result = resultObj.value;
          }   
       }); 
 

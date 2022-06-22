@@ -10,6 +10,7 @@ enum ParserState {
    Ready,
    LookingMacrosOpenParenthesisFirstChar,
    WaitCompleteOpenParenthesis,
+   ApproveCompletingOpenParenthesis,
    LookingMacrosCloseParenthesisFirstChar,
    WaitCompleteCloseParenthesis
 };
@@ -75,13 +76,21 @@ export class TemplateParser {
          case ParserState.WaitCompleteOpenParenthesis: {
                let fault = {value : false};
                if (this.isCompleteOpenParenthesis(charStr, fault)) {
-                  this.addTextSegmentInBuffer();
-                  this.state = ParserState.LookingMacrosCloseParenthesisFirstChar;
+                  this.state = ParserState.ApproveCompletingOpenParenthesis;
+                  // this.state = ParserState.LookingMacrosCloseParenthesisFirstChar;
                } else {
                   if (fault.value) {
                      this.state = ParserState.LookingMacrosOpenParenthesisFirstChar;
                      this.readChar(charStr);
                   }
+               }
+            }
+            break;
+         case ParserState.ApproveCompletingOpenParenthesis: {
+               if (this.isApproveCompleteOpenParenthesis(charStr)) {
+                  this.addTextSegmentInBuffer();
+                  this.state = ParserState.LookingMacrosCloseParenthesisFirstChar;
+                  this.readChar(charStr);
                }
             }
             break;
@@ -113,7 +122,9 @@ export class TemplateParser {
    }
 
    private addTextSegmentInBuffer() {
-      if (this.currentText === '') {
+      if (  this.currentText === '' || 
+            this.currentText === '\n' || 
+            this.currentText === '\r\n') {
          return;
       }
       let segment = new TextSegment(this.currentText);
@@ -139,6 +150,15 @@ export class TemplateParser {
       }
       this.currentText += charStr;
       return false;
+   }
+
+   private isApproveCompleteOpenParenthesis(charStr: string): boolean {
+      let len = this.openParenthesis.length;
+      if ((this.openParenthesis.substring(1) + charStr) === this.openParenthesis) {
+         this.currentText += this.openParenthesis.substring(0,1);
+         return false;
+      }
+      return true;
    }
 
    private isCompleteOpenParenthesis(charStr: string, fault: {value : boolean}):boolean {

@@ -53,7 +53,7 @@ export class Template {
          segment = new TextSegment('');
       }
       let n = 0;
-      while(segment) {
+      while (segment) {
          segment.setLineIndex(indx);
          this.mainSegment.addContent(segment);
          segment = parser.pullBufferSegment();
@@ -105,13 +105,40 @@ export class Template {
    }
    
    private separateByLine(): boolean {
-      if(!this.template){
+      if (!this.template){
          return false;
       }
-      this.lines = this.template.split('\n');
+      let lineBreaker = this.detectLineBreaker();
+      if (lineBreaker !== undefined) {
+         this.lines = this.template.split(lineBreaker);   
+      } else {
+         console.error('Template.separateByLine(): Warning! Not detect any line breaker in the template. Maybe it consist only one line?...');
+         this.lines.push(this.template);
+      }
       // console.log(`Template.separateByLine(): lines.lenth = ${this.lines.length}`);
       
       return true;
+   }
+
+   private detectLineBreaker(): string | undefined {
+      if (!this.template){
+         return undefined;
+      }
+      let newLineSignPos = this.template.indexOf('\n');
+      if (newLineSignPos >= 0) {
+         if (newLineSignPos > 0) {
+            if (this.template[newLineSignPos - 1] === '\r') {
+               return '\r\n';
+            } else {
+               return '\n';
+            }
+         }
+      } else {
+         newLineSignPos = this.template.indexOf('\r');
+         if (newLineSignPos >= 0) {
+            return '\r';
+         }
+      }
    }
 
    // private deleteLines(){
