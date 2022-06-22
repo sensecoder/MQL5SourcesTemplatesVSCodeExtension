@@ -13,8 +13,3 @@ Extention have full tune up capabilities. By editing the settings file, you can 
 ### Files location
 
 Look for files in: `"<extension folder>\out\res\"`. There are some with `".tpl"` extension it is a template blanks. And `"template_settings.json"` is a discribes all parameters of templates like a variables values and a presentation type in a wizard dialogue.
-
-
-
-
-
