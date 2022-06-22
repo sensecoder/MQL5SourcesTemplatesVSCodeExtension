@@ -1,63 +1,20 @@
-# mql5SourceFilesTemplate README
+# MQL5 Files Template Wizard
 
-Maybe later...
+Create files for MQL5 programs like in the original MetaEditor. This template wizard will help you create the skeleton files of the used modules with all the necessary constructs. The style of the original templates is observed (almost), but if you wish, you can edit the template blanks to your liking.
 
-## Features
+## Usage
 
-Best features!
+When you create a new file in VS Code explorer with a `".mq5"` or `".mqh"` extention this triggered a wizard dialog in splitted view area. Next, you need to choose which module you want to create and define the parameters of its designs. Click the accept button and enjoy! 
 
-\!\[feature X\]\(images/feature-x.png\)
+## Customization
 
-> Tip: need to use animation. Later, I guess...
+Extention have full tune up capabilities. By editing the settings file, you can add a new file extension to apply the new template type and define its substitution variables. Also modify and create new template blanks with substitution macros.
 
-## Requirements
+### Files location
 
-It simply work. I guess...
-
-## Extension Settings
-
-Automated all, no need settings/
-
-For example:
-
-This extension NO contributes the following settings:
-
-* `xxx.xxx`: xxx this extension
-* `xxx.yyy`: set to `zzz` to do something
-
-## Known Issues
-
-Its newbie.
-
-## Release Notes
-
-Alpha release.
-
-### 1.0.0
-
-Initial release of ...
+Look for files in: `"<extension folder>\out\res\"`. There are some with `".tpl"` extension it is a template blanks. And `"template_settings.json"` is a discribes all parameters of templates like a variables values and a presentation type in a wizard dialogue.
 
 
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
-## Working with Markdown
-
-Useful things:
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
