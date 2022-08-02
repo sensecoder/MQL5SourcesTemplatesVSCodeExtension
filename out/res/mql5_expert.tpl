@@ -7,7 +7,8 @@
 #property link      "{{Link}}"
 #property version   "{{Version = 1.00}}"
 
-{{if IncludeDescription}}{{Description inMQLCommentBlockStandard}}{{/if}}
+{{if IncludeDescription}}{{Description inMQLCommentBlockStandard}}
+ {{/if}}
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
@@ -39,6 +40,7 @@ void OnTick()
 {
    
 }
+
 {{if OnTimer}}
 //+------------------------------------------------------------------+
 //| Timer function                                                   |
@@ -47,7 +49,7 @@ void OnTimer()
 {
 
 }
-{{/if}}
+ {{/if}}
 {{if OnTrade}}
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
@@ -56,7 +58,7 @@ void OnTrade()
 {
 
 }
-{{/if}}
+ {{/if}}
 {{if OnTradeTransaction}}
 //+------------------------------------------------------------------+
 //| TradeTransaction function                                        |
@@ -67,7 +69,7 @@ void OnTradeTransaction(const MqlTradeTransaction& trans,
 {
 
 }
-{{/if}}
+ {{/if}}
 {{if OnTester}}
 //+------------------------------------------------------------------+
 //| Tester function                                                  |
@@ -78,7 +80,7 @@ double OnTester()
 
    return(ret);
 }
-{{/if}}
+ {{/if}}
 {{if OnTesterInit}}
 //+------------------------------------------------------------------+
 //| TesterInit function                                              |
@@ -87,7 +89,7 @@ void OnTesterInit()
 {
    
 }
-{{/if}}
+ {{/if}}
 {{if OnTesterPass}}
 //+------------------------------------------------------------------+
 //| TesterPass function                                              |
@@ -96,7 +98,7 @@ void OnTesterPass()
 {
    
 }
-{{/if}}
+ {{/if}}
 {{if OnTesterDeinit}}
 //+------------------------------------------------------------------+
 //| TesterDeinit function                                            |
@@ -105,7 +107,7 @@ void OnTesterDeinit()
 {
    
 }
-{{/if}}
+ {{/if}}
 {{if OnChartEvent}}
 //+------------------------------------------------------------------+
 //| ChartEvent function                                              |
@@ -117,7 +119,7 @@ void OnChartEvent(const int id,
 {
    
 }
-{{/if}}
+ {{/if}}
 {{if OnBookEvent}}
 //+------------------------------------------------------------------+
 //| BookEvent function                                               |
@@ -126,5 +128,5 @@ void OnBookEvent(const string &symbol)
 {
    
 }
-{{/if}}
+ {{/if}}
 //+------------------------------------------------------------------+
