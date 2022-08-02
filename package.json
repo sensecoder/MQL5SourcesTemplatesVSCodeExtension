@@ -3,7 +3,7 @@
 	"displayName": "MQL5 Files Template Wizard",
 	"description": "Helps make files template for MQL5 programs.",
 	"publisher": "SenseCoder",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"engines": {
 		"vscode": "^1.53.0"
 	},

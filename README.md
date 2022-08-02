@@ -6,7 +6,7 @@ Create files for MQL5 programs like in the original MetaEditor. This template wi
 
 When you create a new file in VS Code explorer with a `".mq5"` or `".mqh"` extention this triggered a wizard dialog in splitted view area. Next, you need to choose which module you want to create and define the parameters of its designs. Click the accept button and enjoy! 
 
-![Basic demo](https://github.com/sensecoder/MQL5SourcesTemplatesVSCodeExtension/blob/master/raw/demo.gif)
+![Basic demo](https://github.com/sensecoder/MQL5SourcesTemplatesVSCodeExtension/blob/master/raw/demo.gif?raw=true)
 
 ## Customization
 
